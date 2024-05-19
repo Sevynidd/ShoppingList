@@ -28,6 +28,3 @@ local.properties
 gradlew
 gradlew.bat
 gradle/wrapper/gradle-wrapper.properties
-build.gradle.kts
-gradle.properties
-gradle/libs.versions.toml
