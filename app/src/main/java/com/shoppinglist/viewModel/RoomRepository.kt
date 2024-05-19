@@ -1,7 +1,9 @@
 package com.shoppinglist.viewModel
 
+import com.shoppinglist.roomDatabase.Item
 import com.shoppinglist.roomDatabase.List
 import com.shoppinglist.roomDatabase.RoomDatabase
+import kotlinx.coroutines.flow.Flow
 
 class RoomRepository(private val db: RoomDatabase) {
     suspend fun upsertList(list: List) {
@@ -13,4 +15,14 @@ class RoomRepository(private val db: RoomDatabase) {
     }
 
     fun getAllLists() = db.dao.getAllLists()
+
+    suspend fun upsertItem(item: Item) {
+        db.dao.upsertItem(item)
+    }
+
+    suspend fun deleteItem(item: Item) {
+        db.dao.deleteItem(item)
+    }
+
+    fun getAllItems() = db.dao.getAllItems()
 }
