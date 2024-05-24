@@ -32,7 +32,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -46,8 +45,9 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
-import com.shoppinglist.roomDatabase.List
+import com.shoppinglist.roomDatabase.ListWithItemCount
 import com.shoppinglist.roomDatabase.RoomDatabase
+import com.shoppinglist.roomDatabase.RoomList
 import com.shoppinglist.ui.theme.ShoppingListTheme
 import com.shoppinglist.viewModel.RoomRepository
 import com.shoppinglist.viewModel.RoomViewModel
@@ -172,7 +172,7 @@ class MainActivity : ComponentActivity() {
                                     onClick = {
 
                                         if (textListName.text.isNotBlank()) {
-                                            val list = List(
+                                            val list = RoomList(
                                                 name = textListName.text,
                                                 note = textListNote.text
                                             )
@@ -200,31 +200,37 @@ class MainActivity : ComponentActivity() {
     fun Content() {
 
         var listofLists by remember {
-            mutableStateOf(listOf<List>())
+            mutableStateOf(listOf<ListWithItemCount>())
         }
 
         viewModel.getLists().observe(this) {
             listofLists = it
         }
 
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            items(listofLists) { list ->
-                ListItem(
-                    modifier = Modifier.clip(shape = RoundedCornerShape(12.dp)),
-                    headlineContent = { Text(list.name) },
-                    supportingContent = { Text(list.note) },
-                    trailingContent = { Text("Anzahl: ${list.listID}") },
-                    leadingContent = {
-                        Icon(
-                            Icons.Default.ShoppingCart,
-                            contentDescription = "ShoppingCart",
+        if ((listofLists.isNotEmpty())) {
+            if (listofLists[0].list != null) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(listofLists) { list ->
+                        ListItem(
+                            modifier = Modifier.clip(shape = RoundedCornerShape(12.dp)),
+                            headlineContent = { list.list?.let { Text(it.name) } },
+                            supportingContent = { list.list?.note?.let { Text(it) } },
+                            trailingContent = {
+                                Text("Anzahl: ${list.itemCount}")
+                            },
+                            leadingContent = {
+                                Icon(
+                                    Icons.Default.ShoppingCart,
+                                    contentDescription = "ShoppingCart",
+                                )
+                            },
+                            tonalElevation = 4.dp
                         )
-                    },
-                    tonalElevation = 4.dp
-                )
+                    }
+                }
             }
         }
     }

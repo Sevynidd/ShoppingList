@@ -1,16 +1,13 @@
 package com.shoppinglist.roomDatabase
 
+import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(
-    tableName = "Item"
-)
-data class Item(
+@Entity(tableName = "List")
+data class RoomList(
     @PrimaryKey(autoGenerate = true)
-    val itemID: Int = 0,
-    val price: Double?,
+    val listID: Int = 0,
     val name: String,
-    val note: String?,
-    val amount: Int?
+    val note: String
 )
