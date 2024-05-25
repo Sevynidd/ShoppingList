@@ -17,8 +17,8 @@ import com.shoppinglist.roomDatabase.RoomDatabase
 import com.shoppinglist.ui.theme.ShoppingListTheme
 import com.shoppinglist.viewModel.RoomRepository
 import com.shoppinglist.viewModel.RoomViewModel
+import com.shoppinglist.views.ScreenList
 import com.shoppinglist.views.ScreenListDetails
-import com.shoppinglist.views.ScreenListen
 import kotlinx.serialization.Serializable
 
 class MainActivity : ComponentActivity() {
@@ -52,12 +52,12 @@ class MainActivity : ComponentActivity() {
                     startDestination = ScreenListen
                 ) {
                     composable<ScreenListen> {
-                        ScreenListen(viewModel, navController)
+                        ScreenList(viewModel, navController)
                     }
 
                     composable<ScreenListeDetail> {
                         val args = it.toRoute<ScreenListeDetail>()
-                        ScreenListDetails()
+                        ScreenListDetails(args, viewModel, navController)
                     }
                 }
             }

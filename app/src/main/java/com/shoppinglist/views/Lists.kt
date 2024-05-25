@@ -47,7 +47,7 @@ import com.shoppinglist.viewModel.RoomViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenListen(viewModel: RoomViewModel, navController: NavHostController) {
+fun ScreenList(viewModel: RoomViewModel, navController: NavHostController) {
     ShoppingListTheme {
         var showBottomSheet by remember { mutableStateOf(false) }
         val sheetState = rememberModalBottomSheetState()
