@@ -5,65 +5,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.SwipeToDismissBoxValue
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.minimumInteractiveComponentSize
-import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.material3.rememberSwipeToDismissBoxState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import androidx.room.Room
-import com.shoppinglist.roomDatabase.ListWithItemCount
 import com.shoppinglist.roomDatabase.RoomDatabase
-import com.shoppinglist.roomDatabase.RoomList
 import com.shoppinglist.ui.theme.ShoppingListTheme
 import com.shoppinglist.viewModel.RoomRepository
 import com.shoppinglist.viewModel.RoomViewModel
+import com.shoppinglist.views.ScreenListDetails
+import com.shoppinglist.views.ScreenListen
+import kotlinx.serialization.Serializable
 
 class MainActivity : ComponentActivity() {
     private val db by lazy {
@@ -77,223 +33,44 @@ class MainActivity : ComponentActivity() {
         factoryProducer = {
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    @Suppress("UNCHECKED_CAST")
                     return RoomViewModel(RoomRepository(db)) as T
                 }
             }
         }
     )
 
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         installSplashScreen()
         setContent {
             ShoppingListTheme {
-                var showBottomSheet by remember { mutableStateOf(false) }
-                val sheetState = rememberModalBottomSheetState()
-
-                Scaffold(modifier = Modifier.fillMaxSize(),
-                    topBar = { TopAppBar(title = { Text(text = "Meine Listen") }) },
-                    /*bottomBar = {
-                        BottomAppBar {
-                            NavigationBar {
-                                NavigationBarItem(
-                                    selected = true,
-                                    onClick = { /*TODO*/ },
-                                    icon = {
-                                        Icon(
-                                            Icons.Default.Home,
-                                            contentDescription = "Home"
-                                        )
-                                    })
-                            }
-                        }
-                    },*/
-                    floatingActionButton = {
-                        FloatingActionButton(
-                            onClick = {
-                                showBottomSheet = true
-                            }
-                        ) {
-                            Icon(Icons.Default.Add, "Add Lists")
-                        }
-                    }
-                ) { innerPadding ->
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding)
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(horizontal = 18.dp)
-                        ) {
-                            Content()
-                        }
-                    }
-
-                    if (showBottomSheet) {
-                        ModalBottomSheet(
-                            onDismissRequest = { showBottomSheet = false },
-                            sheetState = sheetState
-                        ) {
-                            var textListName by remember { mutableStateOf(TextFieldValue("")) }
-                            var listNameMissing by remember { mutableStateOf(false) }
-                            var textListNote by remember { mutableStateOf(TextFieldValue("")) }
-
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 18.dp, horizontal = 60.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                OutlinedTextField(
-                                    value = textListName,
-                                    label = { Text(text = "Name") },
-                                    onValueChange = {
-                                        textListName = it
-                                        listNameMissing = false
-                                    },
-                                    modifier = Modifier.fillMaxWidth(),
-                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                                    singleLine = true,
-                                    isError = listNameMissing,
-                                    supportingText = {
-                                        if (listNameMissing) {
-                                            Text("Es muss ein Listenname eingegeben werden")
-                                        }
-                                    }
-                                )
-
-                                OutlinedTextField(
-                                    value = textListNote,
-                                    label = { Text(text = "Notiz") },
-                                    onValueChange = {
-                                        textListNote = it
-                                    },
-                                    modifier = Modifier.fillMaxWidth(),
-                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                                    singleLine = true
-                                )
-
-                                Spacer(modifier = Modifier.size(12.dp))
-
-                                Button(
-                                    onClick = {
-
-                                        if (textListName.text.isNotBlank()) {
-                                            val list = RoomList(
-                                                name = textListName.text,
-                                                note = textListNote.text
-                                            )
-
-                                            viewModel.upsertList(list)
-
-                                            showBottomSheet = false
-                                        } else {
-                                            listNameMissing = true
-                                        }
-                                    },
-                                    modifier = Modifier.fillMaxWidth(),
-                                ) {
-                                    Text("Speichern")
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun Content() {
-
-        var listofLists by remember {
-            mutableStateOf(listOf<ListWithItemCount>())
-        }
-
-        viewModel.getLists().observe(this) {
-            listofLists = it
-        }
-
-        if ((listofLists.isNotEmpty())) {
-            if (listofLists[0].list != null) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                val navController = rememberNavController()
+                NavHost(
+                    navController = navController,
+                    startDestination = ScreenListen
                 ) {
-                    items(listofLists) { list ->
-                        val dismissState = rememberSwipeToDismissBoxState()
+                    composable<ScreenListen> {
+                        ScreenListen(viewModel, navController)
+                    }
 
-                        lateinit var icon: ImageVector
-                        lateinit var alignment: Alignment
-                        val color: Color
-
-                        when (dismissState.dismissDirection) {
-                            SwipeToDismissBoxValue.EndToStart -> {
-                                icon = Icons.Default.Delete
-                                alignment = Alignment.CenterEnd
-                                color = MaterialTheme.colorScheme.errorContainer
-                            }
-
-                            SwipeToDismissBoxValue.StartToEnd -> {
-                                icon = Icons.Default.Create
-                                alignment = Alignment.CenterStart
-                                color =
-                                    Color.Green.copy(alpha = 0.3f)
-                            }
-
-                            SwipeToDismissBoxValue.Settled -> {
-                                icon = Icons.Default.Check
-                                alignment = Alignment.CenterEnd
-                                color = MaterialTheme.colorScheme.errorContainer
-                            }
-                        }
-
-                        SwipeToDismissBox(
-                            modifier = Modifier
-                                .animateContentSize()
-                                .clip(shape = RoundedCornerShape(12.dp)),
-                            state = dismissState,
-                            backgroundContent = {
-                                Box(
-                                    contentAlignment = alignment,
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .background(color)
-                                ) {
-                                    Icon(
-                                        modifier = Modifier.minimumInteractiveComponentSize(),
-                                        imageVector = icon, contentDescription = null
-                                    )
-                                }
-                            },
-                            content = {
-                                ListItem(
-                                    modifier = Modifier.clip(shape = RoundedCornerShape(12.dp)),
-                                    headlineContent = { list.list?.let { Text(it.name) } },
-                                    supportingContent = { list.list?.note?.let { Text(it) } },
-                                    trailingContent = {
-                                        Text("Anzahl: ${list.itemCount}")
-                                    },
-                                    leadingContent = {
-                                        Icon(
-                                            Icons.Default.ShoppingCart,
-                                            contentDescription = "ShoppingCart",
-                                        )
-                                    },
-                                    tonalElevation = 4.dp
-                                )
-                            }
-                        )
+                    composable<ScreenListeDetail> {
+                        val args = it.toRoute<ScreenListeDetail>()
+                        ScreenListDetails()
                     }
                 }
             }
         }
     }
 }
+
+@Serializable
+object ScreenListen
+
+@Serializable
+data class ScreenListeDetail(
+    val listID: Int,
+    val listName: String,
+    val listNote: String
+)

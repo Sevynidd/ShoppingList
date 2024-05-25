@@ -1,7 +1,7 @@
 package com.shoppinglist.viewModel
 
-import com.shoppinglist.roomDatabase.RoomItem
-import com.shoppinglist.roomDatabase.RoomList
+import com.shoppinglist.roomDatabase.entities.RoomItem
+import com.shoppinglist.roomDatabase.entities.RoomList
 import com.shoppinglist.roomDatabase.RoomDatabase
 
 class RoomRepository(private val db: RoomDatabase) {

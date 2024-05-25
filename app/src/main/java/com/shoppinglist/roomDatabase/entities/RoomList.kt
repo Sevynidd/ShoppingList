@@ -1,6 +1,5 @@
-package com.shoppinglist.roomDatabase
+package com.shoppinglist.roomDatabase.entities
 
-import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 

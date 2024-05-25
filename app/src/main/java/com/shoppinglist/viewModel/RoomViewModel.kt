@@ -1,14 +1,19 @@
 package com.shoppinglist.viewModel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.shoppinglist.roomDatabase.RoomItem
-import com.shoppinglist.roomDatabase.RoomList
+import com.shoppinglist.roomDatabase.entities.ListWithItemCount
+import com.shoppinglist.roomDatabase.entities.RoomItem
+import com.shoppinglist.roomDatabase.entities.RoomList
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.lang.Thread.State
 
 class RoomViewModel(private val repository: RoomRepository) : ViewModel() {
-    fun getLists() = repository.getAllLists().asLiveData(viewModelScope.coroutineContext)
+    val allLists: StateFlow<List<ListWithItemCount>> =
+        repository.getAllLists().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     fun upsertList(list: RoomList) {
         viewModelScope.launch {
@@ -22,7 +27,8 @@ class RoomViewModel(private val repository: RoomRepository) : ViewModel() {
         }
     }
 
-    fun getItems() = repository.getAllItems().asLiveData(viewModelScope.coroutineContext)
+    val allItems: StateFlow<List<RoomItem>> =
+        repository.getAllItems().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     fun upsertItem(item: RoomItem) {
         viewModelScope.launch {

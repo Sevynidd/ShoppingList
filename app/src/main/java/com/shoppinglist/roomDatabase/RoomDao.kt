@@ -3,8 +3,10 @@ package com.shoppinglist.roomDatabase
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
-import androidx.room.Transaction
 import androidx.room.Upsert
+import com.shoppinglist.roomDatabase.entities.ListWithItemCount
+import com.shoppinglist.roomDatabase.entities.RoomItem
+import com.shoppinglist.roomDatabase.entities.RoomList
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -15,7 +17,7 @@ interface RoomDao {
     @Delete
     suspend fun deleteList(list: RoomList)
 
-    @Query("SELECT l.*, COUNT(i.listID) as itemCount FROM List l LEFT JOIN Item i ON l.listID = i.listID")
+    @Query("SELECT l.*, COUNT(i.listID) as itemCount FROM List l LEFT JOIN Item i ON l.listID = i.listID GROUP BY l.listID")
     fun getAllLists(): Flow<List<ListWithItemCount>>
 
     @Upsert
