@@ -20,13 +20,16 @@ interface RoomDao {
     @Query("SELECT l.*, COUNT(i.listID) as itemCount FROM List l LEFT JOIN Item i ON l.listID = i.listID GROUP BY l.listID")
     fun getAllLists(): Flow<List<ListWithItemCount>>
 
+    @Query("SELECT * FROM List WHERE listID = :listID")
+    fun getListFromListID(listID: Int): Flow<RoomList>
+
     @Upsert
     suspend fun upsertItem(item: RoomItem)
 
     @Delete
     suspend fun deleteItem(item: RoomItem)
 
-    @Query("SELECT * FROM Item")
-    fun getAllItems(): Flow<List<RoomItem>>
+    @Query("SELECT * FROM Item WHERE listID = :listID")
+    fun getAllItems(listID: Int): Flow<List<RoomItem>>
 
 }

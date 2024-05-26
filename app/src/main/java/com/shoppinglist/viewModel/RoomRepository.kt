@@ -3,6 +3,7 @@ package com.shoppinglist.viewModel
 import com.shoppinglist.roomDatabase.entities.RoomItem
 import com.shoppinglist.roomDatabase.entities.RoomList
 import com.shoppinglist.roomDatabase.RoomDatabase
+import kotlinx.coroutines.flow.Flow
 
 class RoomRepository(private val db: RoomDatabase) {
     suspend fun upsertList(list: RoomList) {
@@ -15,6 +16,8 @@ class RoomRepository(private val db: RoomDatabase) {
 
     fun getAllLists() = db.dao.getAllLists()
 
+    fun getListFromListID(listID: Int) = db.dao.getListFromListID(listID = listID)
+
     suspend fun upsertItem(item: RoomItem) {
         db.dao.upsertItem(item)
     }
@@ -23,6 +26,6 @@ class RoomRepository(private val db: RoomDatabase) {
         db.dao.deleteItem(item)
     }
 
-    fun getAllItems() = db.dao.getAllItems()
+    fun getAllItems(listID: Int) = db.dao.getAllItems(listID = listID)
 
 }

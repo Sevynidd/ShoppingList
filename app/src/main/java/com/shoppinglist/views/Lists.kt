@@ -1,11 +1,15 @@
 package com.shoppinglist.views
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,6 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -105,7 +110,7 @@ fun ScreenList(viewModel: RoomViewModel, navController: NavHostController) {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 18.dp, horizontal = 60.dp),
+                            .padding(vertical = 12.dp, horizontal = 50.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
@@ -168,13 +173,14 @@ fun ScreenList(viewModel: RoomViewModel, navController: NavHostController) {
 }
 
 @Composable
-fun Content(navController: NavHostController, viewModel: RoomViewModel) {
+private fun Content(navController: NavHostController, viewModel: RoomViewModel) {
 
     val listofLists by viewModel.allLists.collectAsState()
 
     if (listofLists.isNotEmpty()) {
         LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(listofLists) { list ->
@@ -185,9 +191,7 @@ fun Content(navController: NavHostController, viewModel: RoomViewModel) {
                             onClick = {
                                 navController.navigate(
                                     ScreenListeDetail(
-                                        list.list.listID,
-                                        list.list.name,
-                                        list.list.note
+                                        list.list.listID
                                     )
                                 )
                             }
@@ -201,6 +205,7 @@ fun Content(navController: NavHostController, viewModel: RoomViewModel) {
                         Icon(
                             Icons.Default.ShoppingCart,
                             contentDescription = "ShoppingCart",
+                            tint = MaterialTheme.colorScheme.surfaceTint
                         )
                     },
                     tonalElevation = 4.dp

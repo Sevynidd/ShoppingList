@@ -17,6 +17,7 @@ import com.shoppinglist.roomDatabase.RoomDatabase
 import com.shoppinglist.ui.theme.ShoppingListTheme
 import com.shoppinglist.viewModel.RoomRepository
 import com.shoppinglist.viewModel.RoomViewModel
+import com.shoppinglist.views.ListDetailEdit
 import com.shoppinglist.views.ScreenList
 import com.shoppinglist.views.ScreenListDetails
 import kotlinx.serialization.Serializable
@@ -59,6 +60,11 @@ class MainActivity : ComponentActivity() {
                         val args = it.toRoute<ScreenListeDetail>()
                         ScreenListDetails(args, viewModel, navController)
                     }
+
+                    composable<ScreenListeDetailEdit> {
+                        val args = it.toRoute<ScreenListeDetailEdit>()
+                        ListDetailEdit(args, viewModel, navController)
+                    }
                 }
             }
         }
@@ -70,7 +76,17 @@ object ScreenListen
 
 @Serializable
 data class ScreenListeDetail(
+    val listID: Int
+)
+
+@Serializable
+data class ScreenListeDetailEdit(
     val listID: Int,
-    val listName: String,
-    val listNote: String
+    val itemID: Int,
+    val name: String,
+    val note: String?,
+    val price: String?,
+    val amount: Int,
+    val unitID: Int,
+    val categoryID: Int
 )

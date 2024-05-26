@@ -14,7 +14,7 @@ import com.shoppinglist.roomDatabase.entities.RoomUnit
         RoomUnit::class,
         RoomCategory::class,
         RoomAddress::class],
-    version = 1
+    version = 2
 )
 abstract class RoomDatabase : RoomDatabase() {
     abstract val dao: RoomDao
