@@ -28,4 +28,6 @@ class RoomRepository(private val db: RoomDatabase) {
 
     fun getAllItems(listID: Int) = db.dao.getAllItems(listID = listID)
 
+    fun getItemFromItemID(itemID: Int) = db.dao.getItemFromItemID(itemID = itemID)
+
 }

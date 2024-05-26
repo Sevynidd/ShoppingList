@@ -32,4 +32,7 @@ interface RoomDao {
     @Query("SELECT * FROM Item WHERE listID = :listID")
     fun getAllItems(listID: Int): Flow<List<RoomItem>>
 
+    @Query("SELECT * FROM Item WHERE itemID = :itemID")
+    fun getItemFromItemID(itemID: Int): Flow<RoomItem>
+
 }

@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.lang.Thread.State
 
 class RoomViewModel(private val repository: RoomRepository) : ViewModel() {
     val allLists: StateFlow<List<ListWithItemCount>> =
@@ -49,6 +48,17 @@ class RoomViewModel(private val repository: RoomRepository) : ViewModel() {
         viewModelScope.launch {
             repository.getListFromListID(listID).collect { listEntry ->
                 _listFromListID.value = listEntry
+            }
+        }
+    }
+
+    private val _itemFromItemID = MutableStateFlow<RoomItem?>(null)
+    val itemFromItemID: StateFlow<RoomItem?> get() = _itemFromItemID
+
+    fun getItemFromItemID(itemID: Int) {
+        viewModelScope.launch {
+            repository.getItemFromItemID(itemID).collect { listEntry ->
+                _itemFromItemID.value = listEntry
             }
         }
     }

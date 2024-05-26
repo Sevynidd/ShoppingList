@@ -2,12 +2,18 @@ package com.shoppinglist.views
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -15,12 +21,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.shoppinglist.ScreenListeDetail
 import com.shoppinglist.ScreenListeDetailEdit
 import com.shoppinglist.ScreenListen
+import com.shoppinglist.roomDatabase.entities.RoomItem
 import com.shoppinglist.ui.theme.ShoppingListTheme
 import com.shoppinglist.viewModel.RoomViewModel
 
@@ -32,6 +44,13 @@ fun ListDetailEdit(
     navController: NavHostController
 ) {
     ShoppingListTheme {
+        var textItemName by remember { mutableStateOf(TextFieldValue("")) }
+
+        LaunchedEffect(args.itemID) {
+            viewModel.getItemFromItemID(args.itemID)
+        }
+
+        val listItem by viewModel.itemFromItemID.collectAsState()
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -40,9 +59,24 @@ fun ListDetailEdit(
                     title = { Text(text = "Item: ${args.name}") },
                     navigationIcon = {
                         IconButton(onClick = {
-                            navController.navigate(ScreenListeDetail(
-                                listID = args.listID
-                            ))
+                            viewModel.upsertItem(
+                                RoomItem(
+                                    itemID = args.itemID,
+                                    listID = args.listID,
+                                    name = textItemName.text,
+                                    note = null,
+                                    price = null,
+                                    categoryID = null,
+                                    amount = 1,
+                                    unitID = null
+                                )
+                            )
+
+                            navController.navigate(
+                                ScreenListeDetail(
+                                    listID = args.listID
+                                )
+                            )
                         }) {
                             Icon(Icons.AutoMirrored.Default.ArrowBack, "Zurück")
                         }
@@ -60,15 +94,24 @@ fun ListDetailEdit(
                             .fillMaxSize()
                             .padding(horizontal = 18.dp)
                     ) {
-                        Content()
+                        LaunchedEffect(listItem) {
+                            listItem?.let {
+                                textItemName = TextFieldValue(it.name)
+                            }
+                        }
+
+                        OutlinedTextField(
+                            value = textItemName,
+                            label = { Text(text = "Name") },
+                            onValueChange = {
+                                textItemName = it
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                            singleLine = true,
+                        )
                     }
                 }
             }
         )
     }
-}
-
-@Composable
-private fun Content() {
-
 }
