@@ -25,16 +25,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.shoppinglist.ScreenListeDetail
-import com.shoppinglist.ScreenListeDetailEdit
+import com.shoppinglist.ScreenLItems
+import com.shoppinglist.ScreenItemEdit
 import com.shoppinglist.roomDatabase.entities.RoomItem
 import com.shoppinglist.ui.theme.ShoppingListTheme
 import com.shoppinglist.viewModel.RoomViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListDetailEdit(
-    args: ScreenListeDetailEdit,
+fun ItemEdit(
+    args: ScreenItemEdit,
     viewModel: RoomViewModel,
     navController: NavHostController
 ) {
@@ -68,7 +68,7 @@ fun ListDetailEdit(
                             )
 
                             navController.navigate(
-                                ScreenListeDetail(
+                                ScreenLItems(
                                     listID = args.listID
                                 )
                             )

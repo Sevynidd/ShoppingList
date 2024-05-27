@@ -1,5 +1,6 @@
 package com.shoppinglist.views
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -42,17 +43,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.shoppinglist.ScreenListeDetail
-import com.shoppinglist.ScreenListeDetailEdit
-import com.shoppinglist.ScreenListen
+import com.shoppinglist.ScreenLItems
+import com.shoppinglist.ScreenItemEdit
+import com.shoppinglist.ScreenLists
 import com.shoppinglist.roomDatabase.entities.RoomItem
 import com.shoppinglist.ui.theme.ShoppingListTheme
 import com.shoppinglist.viewModel.RoomViewModel
 
+@SuppressLint("RememberReturnType")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenListDetails(
-    args: ScreenListeDetail,
+fun LItems(
+    args: ScreenLItems,
     viewModel: RoomViewModel,
     navController: NavHostController
 ) {
@@ -74,7 +76,7 @@ fun ScreenListDetails(
                     title = { Text(text = "Liste: ${listFromListId?.name}") },
                     navigationIcon = {
                         IconButton(onClick = {
-                            navController.navigate(ScreenListen)
+                            navController.navigate(ScreenLists)
                         }) {
                             Icon(Icons.AutoMirrored.Default.ArrowBack, "Zurück")
                         }
@@ -197,7 +199,7 @@ fun ScreenListDetails(
 @Composable
 private fun Content(
     viewModel: RoomViewModel,
-    args: ScreenListeDetail,
+    args: ScreenLItems,
     navController: NavHostController
 ) {
     val listOfItems by viewModel.allItems.collectAsState()
@@ -215,7 +217,7 @@ private fun Content(
                         .clickable(
                             onClick = {
                                 navController.navigate(
-                                    ScreenListeDetailEdit(
+                                    ScreenItemEdit(
                                         item.listID,
                                         item.itemID,
                                         item.name,

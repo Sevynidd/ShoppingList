@@ -17,9 +17,10 @@ import com.shoppinglist.roomDatabase.RoomDatabase
 import com.shoppinglist.ui.theme.ShoppingListTheme
 import com.shoppinglist.viewModel.RoomRepository
 import com.shoppinglist.viewModel.RoomViewModel
-import com.shoppinglist.views.ListDetailEdit
-import com.shoppinglist.views.ScreenList
-import com.shoppinglist.views.ScreenListDetails
+import com.shoppinglist.views.ItemEdit
+import com.shoppinglist.views.LItems
+import com.shoppinglist.views.ListEdit
+import com.shoppinglist.views.Lists
 import kotlinx.serialization.Serializable
 
 class MainActivity : ComponentActivity() {
@@ -50,20 +51,25 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
-                    startDestination = ScreenListen
+                    startDestination = ScreenLists
                 ) {
-                    composable<ScreenListen> {
-                        ScreenList(viewModel, navController)
+                    composable<ScreenLists> {
+                        Lists(viewModel, navController)
                     }
 
-                    composable<ScreenListeDetail> {
-                        val args = it.toRoute<ScreenListeDetail>()
-                        ScreenListDetails(args, viewModel, navController)
+                    composable<ScreenLItems> {
+                        val args = it.toRoute<ScreenLItems>()
+                        LItems(args, viewModel, navController)
                     }
 
-                    composable<ScreenListeDetailEdit> {
-                        val args = it.toRoute<ScreenListeDetailEdit>()
-                        ListDetailEdit(args, viewModel, navController)
+                    composable<ScreenItemEdit> {
+                        val args = it.toRoute<ScreenItemEdit>()
+                        ItemEdit(args, viewModel, navController)
+                    }
+
+                    composable<ScreenListEdit> {
+                        val args = it.toRoute<ScreenListEdit>()
+                        ListEdit(args = args, viewModel = viewModel, navController = navController)
                     }
                 }
             }
@@ -72,15 +78,15 @@ class MainActivity : ComponentActivity() {
 }
 
 @Serializable
-object ScreenListen
+object ScreenLists
 
 @Serializable
-data class ScreenListeDetail(
+data class ScreenLItems(
     val listID: Int
 )
 
 @Serializable
-data class ScreenListeDetailEdit(
+data class ScreenItemEdit(
     val listID: Int,
     val itemID: Int,
     val name: String,
@@ -89,4 +95,9 @@ data class ScreenListeDetailEdit(
     val amount: Int,
     val unitID: Int,
     val categoryID: Int
+)
+
+@Serializable
+data class ScreenListEdit(
+    val listID: Int
 )
