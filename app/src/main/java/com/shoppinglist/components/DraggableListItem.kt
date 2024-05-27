@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -71,6 +72,9 @@ fun DraggableListItem(
 
     var showDeleteDialog by remember { mutableStateOf(false) }
 
+    val colorDelete = if (isSystemInDarkTheme()) Color(0xFF792423) else Color(0xFFD74541)
+    val colorEdit = if (isSystemInDarkTheme()) Color(0xFF135A2A) else Color(0xFF48E078)
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -96,7 +100,7 @@ fun DraggableListItem(
 
         if (offsetX > anchors[0]) {
             ButtonOnBox(
-                modifier = mod.background(Color(0xFF48E078)),
+                modifier = mod.background(colorEdit),
                 alignment = Alignment.CenterStart,
                 onClick = { onEdit() },
                 iconButtonModifier = Modifier
@@ -112,7 +116,7 @@ fun DraggableListItem(
 
         } else {
             ButtonOnBox(
-                modifier = mod.background(Color(0xFFE04A48)),
+                modifier = mod.background(colorDelete),
                 alignment = Alignment.CenterEnd,
                 onClick = { showDeleteDialog = true },
                 iconButtonModifier = Modifier
