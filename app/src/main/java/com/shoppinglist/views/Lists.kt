@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.shoppinglist.ScreenLItems
 import com.shoppinglist.ScreenListEdit
-import com.shoppinglist.ScreenLists
 import com.shoppinglist.components.DraggableListItem
 import com.shoppinglist.roomDatabase.entities.RoomList
 import com.shoppinglist.ui.theme.ShoppingListTheme
@@ -154,9 +153,6 @@ fun Lists(viewModel: RoomViewModel, navController: NavHostController) {
 private fun Content(navController: NavHostController, viewModel: RoomViewModel) {
 
     val listofLists by viewModel.allLists.collectAsState()
-
-    val anchors = listOf(0f, 180f, -180f)
-
     if (listofLists.isNotEmpty()) {
         LazyColumn(
             modifier = Modifier
@@ -166,7 +162,6 @@ private fun Content(navController: NavHostController, viewModel: RoomViewModel) 
             items(listofLists) { list ->
 
                 DraggableListItem(
-                    anchors = anchors,
                     onDelete = {
                         viewModel.deleteList(
                             RoomList(

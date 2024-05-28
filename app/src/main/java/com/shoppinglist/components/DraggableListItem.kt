@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,20 +35,37 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.shoppinglist.R
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
+/**
+ * @param anchors List of Float-Values that defines, how much the ListItem can be dragged.
+ * @param onDelete What should happen on delete-click?
+ * @param onEdit What should happen on edit-click?
+ * @param onListItemClick What should happen, when the ListItem itself is clicked?
+ * @param headline Headline of ListItem
+ * @param supporting Supporting text of ListItem
+ * @param trailing Trailing text of ListItem
+ */
 @Composable
 fun DraggableListItem(
-    anchors: List<Float>,
+    anchors: List<Float>? = listOf(0f, 180f, -180f),
     onDelete: () -> Unit?,
     onEdit: () -> Unit?,
-    onListItemClick: () -> Unit,
-    headline: @Composable () -> Unit,
-    supporting: @Composable () -> Unit,
-    trailing: @Composable () -> Unit
+    onListItemClick: (() -> Unit)? = null,
+    headline: @Composable (() -> Unit)? = {
+        Text("Keine Headline")
+    },
+    supporting: @Composable (() -> Unit)? = {
+        Text("Kein Supporting Text")
+    },
+    trailing: @Composable (() -> Unit)? = {
+        Text("Kein Trailing Content")
+    }
 ) {
 
     val coroutineScope = rememberCoroutineScope()
@@ -72,8 +88,10 @@ fun DraggableListItem(
 
     var showDeleteDialog by remember { mutableStateOf(false) }
 
-    val colorDelete = if (isSystemInDarkTheme()) Color(0xFF792423) else Color(0xFFD74541)
-    val colorEdit = if (isSystemInDarkTheme()) Color(0xFF135A2A) else Color(0xFF48E078)
+    val context = LocalContext.current
+
+    val colorDelete = Color(context.getColor(R.color.red))
+    val colorEdit = Color(context.getColor(R.color.green))
 
     Box(
         modifier = Modifier
@@ -87,7 +105,7 @@ fun DraggableListItem(
                 onDragStopped = {
                     coroutineScope.launch {
                         val target =
-                            anchors.minByOrNull { kotlin.math.abs(it - offsetX) } ?: 0f
+                            anchors?.minByOrNull { kotlin.math.abs(it - offsetX) } ?: 0f
                         offsetX = target
                     }
                 }
@@ -98,7 +116,7 @@ fun DraggableListItem(
             .matchParentSize()
             .clip(shape = RoundedCornerShape(12.dp))
 
-        if (offsetX > anchors[0]) {
+        if (offsetX > 0f) {
             ButtonOnBox(
                 modifier = mod.background(colorEdit),
                 alignment = Alignment.CenterStart,
@@ -135,14 +153,20 @@ fun DraggableListItem(
             modifier = Modifier
                 .clip(shape = RoundedCornerShape(12.dp))
                 .offset { IntOffset(offsetX.roundToInt(), 0) }
-                .clickable(
-                    onClick = {
-                        onListItemClick()
+                .then(
+                    if (onListItemClick != null) {
+                        Modifier.clickable(
+                            onClick = {
+                                onListItemClick()
+                            }
+                        )
+                    } else {
+                        Modifier
                     }
                 ),
-            headlineContent = headline,
-            supportingContent = supporting,
-            trailingContent = trailing,
+            headlineContent = { headline?.invoke() },
+            supportingContent = { supporting?.invoke() },
+            trailingContent = { trailing?.invoke() },
             leadingContent = {
                 Icon(
                     Icons.Default.ShoppingCart,
@@ -162,7 +186,7 @@ fun DraggableListItem(
                     onClick = {
                         onDelete()
                         showDeleteDialog = false
-                        offsetX = anchors[0]
+                        offsetX = 0f
                     }
                 ) {
                     Text("Löschen")
@@ -172,14 +196,14 @@ fun DraggableListItem(
                 TextButton(
                     onClick = {
                         showDeleteDialog = false
-                        offsetX = anchors[0]
+                        offsetX = 0f
                     }
                 ) {
                     Text("Cancel")
                 }
             },
-            title = { Text("Bestätige löschen") },
-            text = { Text("Bist du dir sicher, dass du diese Liste löschen möchtest?") }
+            title = { Text("Bestätige Löschen") },
+            text = { Text("Bist du dir sicher, dass du dies löschen möchtest?") }
         )
     }
 

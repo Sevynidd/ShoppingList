@@ -1,7 +1,6 @@
 package com.shoppinglist.views
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +20,6 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -43,9 +41,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.shoppinglist.ScreenLItems
 import com.shoppinglist.ScreenItemEdit
+import com.shoppinglist.ScreenLItems
 import com.shoppinglist.ScreenLists
+import com.shoppinglist.components.DraggableListItem
 import com.shoppinglist.roomDatabase.entities.RoomItem
 import com.shoppinglist.ui.theme.ShoppingListTheme
 import com.shoppinglist.viewModel.RoomViewModel
@@ -211,33 +210,39 @@ private fun Content(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(listOfItems) { item ->
-                ListItem(
-                    modifier = Modifier
-                        .clip(shape = RoundedCornerShape(12.dp))
-                        .clickable(
-                            onClick = {
-                                navController.navigate(
-                                    ScreenItemEdit(
-                                        item.listID,
-                                        item.itemID,
-                                        item.name,
-                                        item.note,
-                                        item.price.toString(),
-                                        item.amount,
-                                        item.unitID ?: -1,
-                                        item.categoryID ?: -1
-                                    )
-                                )
-                            }
-                        ),
-                    headlineContent = { Text(item.name) },
-                    supportingContent = { Text(item.note ?: "") },
-                    trailingContent = {
-                        Text("${item.amount}x ${item.unitID ?: ""}")
+                DraggableListItem(
+                    onDelete = {
+                        viewModel.deleteItem(
+                            RoomItem(
+                                itemID = item.itemID,
+                                listID = item.listID,
+                                name = item.name,
+                                note = item.note,
+                                amount = item.amount,
+                                price = item.price,
+                                unitID = item.unitID,
+                                categoryID = item.categoryID
+                            )
+                        )
                     },
-                    tonalElevation = 4.dp
+                    onEdit = {
+                        navController.navigate(
+                            ScreenItemEdit(
+                                item.listID,
+                                item.itemID,
+                                item.name,
+                                item.note,
+                                item.price.toString(),
+                                item.amount,
+                                item.unitID ?: -1,
+                                item.categoryID ?: -1
+                            )
+                        )
+                    },
+                    headline = { Text(item.name) },
+                    supporting = { Text(item.note ?: "") },
+                    trailing = { Text("${item.amount}x ${item.unitID ?: ""}") }
                 )
-
             }
         }
     }
