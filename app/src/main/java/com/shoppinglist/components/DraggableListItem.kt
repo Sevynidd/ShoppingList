@@ -50,6 +50,7 @@ import kotlin.math.roundToInt
  * @param headline Headline of ListItem
  * @param supporting Supporting text of ListItem
  * @param trailing Trailing text of ListItem
+ * @param overline Overline text of ListItem
  */
 @Composable
 fun DraggableListItem(
@@ -58,13 +59,16 @@ fun DraggableListItem(
     onEdit: () -> Unit?,
     onListItemClick: (() -> Unit)? = null,
     headline: @Composable (() -> Unit)? = {
-        Text("Keine Headline")
+        Text("")
     },
     supporting: @Composable (() -> Unit)? = {
-        Text("Kein Supporting Text")
+        Text("")
     },
     trailing: @Composable (() -> Unit)? = {
-        Text("Kein Trailing Content")
+        Text("")
+    },
+    overline: @Composable (() -> Unit)? = {
+        Text("")
     }
 ) {
 
@@ -165,6 +169,7 @@ fun DraggableListItem(
                     }
                 ),
             headlineContent = { headline?.invoke() },
+            overlineContent = {  },
             supportingContent = { supporting?.invoke() },
             trailingContent = { trailing?.invoke() },
             leadingContent = {

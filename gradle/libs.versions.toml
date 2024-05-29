@@ -7,16 +7,17 @@ coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
-lifecycleRuntimeKtx = "2.8.0"
+lifecycleRuntimeKtx = "2.8.1"
 activityCompose = "1.9.0"
 composeBom = "2024.05.00"
-navigationCompose = "2.8.0-beta01"
+navigationCompose = "2.8.0-beta02"
 serialization = "1.6.3"
 uiTextGoogleFonts = "1.6.7"
 room = "2.6.1"
-lifecycleLivedataKtx = "2.8.0"
+lifecycleLivedataKtx = "2.8.1"
 ksp = "1.9.24-1.0.20"
 composeFoundation = "1.6.7"
+icons = "1.7.0-beta02"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -43,6 +44,7 @@ androidx-room-compiler = {module = "androidx.room:room-compiler", version.ref = 
 androidx-room-runtime = {module = "androidx.room:room-runtime", version.ref = "room"}
 androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 androidx-compose-foundation = {module = "androidx.compose.foundation:foundation", version.ref = "composeFoundation"}
+androidx-compose-material-icons-extended = {module = "androidx.compose.material:material-icons-extended", version.ref = "icons"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

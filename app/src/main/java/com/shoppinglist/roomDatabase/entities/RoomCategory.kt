@@ -12,11 +12,12 @@ import androidx.room.PrimaryKey
         childColumns = ["addressID"],
         onDelete = ForeignKey.SET_NULL
     )]
-    )
+)
 data class RoomCategory(
     @PrimaryKey(autoGenerate = true)
     val categoryID: Int = 0,
     val name: String,
     val url: String,
+    val color: String,
     val addressID: Int?
 )

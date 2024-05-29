@@ -136,7 +136,8 @@ fun LItems(
                                             price = 0.0,
                                             amount = 1,
                                             unitID = null,
-                                            categoryID = null
+                                            categoryID = null,
+                                            groupID = null
                                         )
 
                                         viewModel.upsertItem(item)
@@ -159,7 +160,8 @@ fun LItems(
                                                     price = null,
                                                     amount = 1,
                                                     unitID = null,
-                                                    categoryID = null
+                                                    categoryID = null,
+                                                    groupID = null
                                                 )
 
                                                 viewModel.upsertItem(item)
@@ -221,7 +223,8 @@ private fun Content(
                                 amount = item.amount,
                                 price = item.price,
                                 unitID = item.unitID,
-                                categoryID = item.categoryID
+                                categoryID = item.categoryID,
+                                groupID = item.groupID
                             )
                         )
                     },

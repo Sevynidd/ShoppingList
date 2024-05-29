@@ -3,11 +3,11 @@ package com.shoppinglist.roomDatabase.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "List")
-data class RoomList(
+@Entity(
+    tableName = "Group"
+)
+data class RoomGroup(
     @PrimaryKey(autoGenerate = true)
-    val listID: Int = 0,
-    val name: String,
-    val note: String,
-    val notifyDate: Int?
+    val groupID: Int = 0,
+    val name: String
 )

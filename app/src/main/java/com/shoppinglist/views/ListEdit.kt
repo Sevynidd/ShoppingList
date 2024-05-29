@@ -58,7 +58,8 @@ fun ListEdit(
                                 RoomList(
                                     listID = args.listID,
                                     name = textListName.text,
-                                    note = ""
+                                    note = "",
+                                    notifyDate = null
                                 )
                             )
 

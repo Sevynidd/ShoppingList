@@ -63,7 +63,8 @@ fun ItemEdit(
                                     price = null,
                                     categoryID = null,
                                     amount = 1,
-                                    unitID = null
+                                    unitID = null,
+                                    groupID = null
                                 )
                             )
 
