@@ -18,6 +18,7 @@ lifecycleLivedataKtx = "2.8.1"
 ksp = "1.9.24-1.0.20"
 composeFoundation = "1.6.7"
 icons = "1.7.0-beta02"
+datetime = "0.6.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -45,6 +46,7 @@ androidx-room-runtime = {module = "androidx.room:room-runtime", version.ref = "r
 androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 androidx-compose-foundation = {module = "androidx.compose.foundation:foundation", version.ref = "composeFoundation"}
 androidx-compose-material-icons-extended = {module = "androidx.compose.material:material-icons-extended", version.ref = "icons"}
+kotlinx-datetime = {module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

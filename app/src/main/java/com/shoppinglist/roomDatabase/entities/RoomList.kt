@@ -9,5 +9,5 @@ data class RoomList(
     val listID: Int = 0,
     val name: String,
     val note: String,
-    val notifyDate: Int?
+    val notifyDate: Long?
 )

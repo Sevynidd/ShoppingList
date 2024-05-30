@@ -82,4 +82,5 @@ dependencies {
     implementation(libs.androidx.ui.text.google.fonts)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.compose.foundation)
+    implementation(libs.kotlinx.datetime)
 }
