@@ -2,6 +2,7 @@ package com.shoppinglist.views
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -25,8 +26,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.shoppinglist.ScreenLItems
 import com.shoppinglist.ScreenItemEdit
+import com.shoppinglist.ScreenLItems
 import com.shoppinglist.roomDatabase.entities.RoomItem
 import com.shoppinglist.ui.theme.ShoppingListTheme
 import com.shoppinglist.viewModel.RoomViewModel
@@ -40,6 +41,8 @@ fun ItemEdit(
 ) {
     ShoppingListTheme {
         var textItemName by remember { mutableStateOf(TextFieldValue("")) }
+        var textItemNote by remember { mutableStateOf(TextFieldValue("")) }
+        var textItemPrice by remember { mutableStateOf(TextFieldValue("")) }
 
         LaunchedEffect(args.itemID) {
             viewModel.getItemFromItemID(args.itemID)
@@ -59,8 +62,8 @@ fun ItemEdit(
                                     itemID = args.itemID,
                                     listID = args.listID,
                                     name = textItemName.text,
-                                    note = null,
-                                    price = null,
+                                    note = textItemNote.text,
+                                    price = textItemPrice.text.toDoubleOrNull(),
                                     categoryID = null,
                                     amount = 1,
                                     unitID = null,
@@ -88,11 +91,19 @@ fun ItemEdit(
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(horizontal = 18.dp)
+                            .padding(horizontal = 40.dp)
                     ) {
                         LaunchedEffect(listItem) {
                             listItem?.let {
                                 textItemName = TextFieldValue(it.name)
+                                textItemNote = TextFieldValue(it.note ?: "")
+                                textItemPrice = TextFieldValue(
+                                    if (it.price == null) {
+                                        "0.0"
+                                    } else {
+                                        it.price.toString()
+                                    }
+                                )
                             }
                         }
 
@@ -104,6 +115,29 @@ fun ItemEdit(
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                             singleLine = true,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        OutlinedTextField(
+                            value = textItemNote,
+                            label = { Text(text = "Notiz") },
+                            onValueChange = {
+                                textItemNote = it
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        OutlinedTextField(
+                            value = textItemPrice,
+                            label = { Text(text = "Preis") },
+                            onValueChange = {
+                                textItemPrice = it
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth()
                         )
                     }
                 }

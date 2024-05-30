@@ -44,6 +44,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -132,6 +133,8 @@ fun Lists(viewModel: RoomViewModel, navController: NavHostController) {
                     sheetState = sheetState,
                     modifier = Modifier.imePadding()
                 ) {
+                    val focusManager = LocalFocusManager.current
+
                     var textListName by remember { mutableStateOf(TextFieldValue("")) }
                     var listNameMissing by remember { mutableStateOf(false) }
                     var textListNote by remember { mutableStateOf(TextFieldValue("")) }
@@ -196,21 +199,30 @@ fun Lists(viewModel: RoomViewModel, navController: NavHostController) {
                             )
 
                             IconButton(
-                                onClick = { showDatePickerDialog = true },
+                                onClick = {
+                                    focusManager.clearFocus()
+                                    showDatePickerDialog = true
+                                },
                                 modifier = Modifier.weight(0.1f)
                             ) {
                                 Icon(Icons.Default.DateRange, "Date")
                             }
 
                             IconButton(
-                                onClick = { showTimePickerDialog = true },
+                                onClick = {
+                                    focusManager.clearFocus()
+                                    showTimePickerDialog = true
+                                },
                                 modifier = Modifier.weight(0.1f)
                             ) {
                                 Icon(Icons.Default.AccessTime, "Time")
                             }
 
                             IconButton(
-                                onClick = { textNotifyField = 0L },
+                                onClick = {
+                                    focusManager.clearFocus()
+                                    textNotifyField = 0L
+                                },
                                 modifier = Modifier.weight(0.1f)
                             ) {
                                 Icon(Icons.Default.Delete, "Delete")

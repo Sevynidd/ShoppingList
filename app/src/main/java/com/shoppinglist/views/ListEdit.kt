@@ -2,6 +2,7 @@ package com.shoppinglist.views
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -40,6 +41,7 @@ fun ListEdit(
 ) {
     ShoppingListTheme {
         var textListName by remember { mutableStateOf(TextFieldValue("")) }
+        var textListNote by remember { mutableStateOf(TextFieldValue("")) }
 
         LaunchedEffect(args.listID) {
             viewModel.getListFromListID(args.listID)
@@ -58,7 +60,7 @@ fun ListEdit(
                                 RoomList(
                                     listID = args.listID,
                                     name = textListName.text,
-                                    note = "",
+                                    note = textListNote.text,
                                     notifyDate = null
                                 )
                             )
@@ -79,11 +81,12 @@ fun ListEdit(
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(horizontal = 18.dp)
+                            .padding(horizontal = 40.dp)
                     ) {
                         LaunchedEffect(listItem) {
                             listItem?.let {
                                 textListName = TextFieldValue(it.name)
+                                textListNote = TextFieldValue(it.note)
                             }
                         }
 
@@ -95,6 +98,18 @@ fun ListEdit(
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                             singleLine = true,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        OutlinedTextField(
+                            value = textListNote,
+                            label = { Text(text = "Notiz") },
+                            onValueChange = {
+                                textListNote = it
+                            },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth()
                         )
                     }
                 }
