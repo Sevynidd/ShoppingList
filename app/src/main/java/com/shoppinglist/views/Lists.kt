@@ -38,7 +38,6 @@ import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -99,7 +98,7 @@ fun Lists(viewModel: RoomViewModel, navController: NavHostController) {
             initialMinute = 0
         )
 
-        var textNotifyField by remember { mutableLongStateOf(0L) }
+        var textNotifyField by remember { mutableStateOf(null as LocalDateTime?) }
 
         Scaffold(modifier = Modifier.fillMaxSize(),
             topBar = { TopAppBar(title = { Text(text = "Meine Listen") }) },
@@ -182,17 +181,13 @@ fun Lists(viewModel: RoomViewModel, navController: NavHostController) {
                         ) {
                             Text(
                                 text = "Benachrichtigung: ${
-                                    if (textNotifyField == 0L) {
+                                    if ((textNotifyField?.toInstant(TimeZone.currentSystemDefault())
+                                            ?.toEpochMilliseconds() == 0L) or (textNotifyField == null)
+                                    ) {
                                         "Keine"
                                     } else {
-                                        val dateTime =
-                                            Instant.fromEpochMilliseconds(textNotifyField)
-                                                .toLocalDateTime(
-                                                    TimeZone.currentSystemDefault()
-                                                )
-
-                                        "\n" + dateTime.toJavaLocalDateTime()
-                                            .format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
+                                        "\n" + (textNotifyField?.toJavaLocalDateTime()
+                                            ?.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")))
                                     }
                                 }",
                                 modifier = Modifier.weight(0.7f)
@@ -221,7 +216,7 @@ fun Lists(viewModel: RoomViewModel, navController: NavHostController) {
                             IconButton(
                                 onClick = {
                                     focusManager.clearFocus()
-                                    textNotifyField = 0L
+                                    textNotifyField = null
                                 },
                                 modifier = Modifier.weight(0.1f)
                             ) {
@@ -241,10 +236,11 @@ fun Lists(viewModel: RoomViewModel, navController: NavHostController) {
                                         name = textListName.text,
                                         note = textListNote.text,
                                         notifyDate =
-                                        if (textNotifyField == 0L) {
+                                        if (textNotifyField == null) {
                                             null
                                         } else {
-                                            textNotifyField
+                                            textNotifyField?.toInstant(TimeZone.currentSystemDefault())
+                                                ?.toEpochMilliseconds()
                                         }
 
                                     )
@@ -282,8 +278,7 @@ fun Lists(viewModel: RoomViewModel, navController: NavHostController) {
                                 0
                             )
 
-                            textNotifyField = newDate.toInstant(TimeZone.currentSystemDefault())
-                                .toEpochMilliseconds()
+                            textNotifyField = newDate
 
                             showDatePickerDialog = false
                         }) {
@@ -301,20 +296,19 @@ fun Lists(viewModel: RoomViewModel, navController: NavHostController) {
                     confirmButton = {
                         Button(onClick = {
 
-                            val dateTime = Instant.fromEpochMilliseconds(
-                                textNotifyField
-                            ).toLocalDateTime(TimeZone.currentSystemDefault())
+                            val newDateTime: LocalDateTime? = if (textNotifyField == null) {
+                                null
+                            } else {
+                                LocalDateTime(
+                                    textNotifyField!!.year,
+                                    textNotifyField!!.monthNumber,
+                                    textNotifyField!!.dayOfMonth,
+                                    timePickerState.hour,
+                                    timePickerState.minute
+                                )
+                            }
 
-                            val newDateTime = LocalDateTime(
-                                dateTime.year,
-                                dateTime.month,
-                                dateTime.dayOfMonth,
-                                timePickerState.hour,
-                                timePickerState.minute
-                            )
-
-                            textNotifyField = newDateTime.toInstant(TimeZone.currentSystemDefault())
-                                .toEpochMilliseconds()
+                            textNotifyField = newDateTime
 
                             showTimePickerDialog = false
                         }) {

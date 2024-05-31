@@ -2,7 +2,7 @@
 agp = "8.5.0-beta02"
 coreSplashscreen = "1.0.1"
 datastorePreferences = "1.1.1"
-kotlin = "1.9.24"
+kotlin = "2.0.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -15,7 +15,7 @@ serialization = "1.6.3"
 uiTextGoogleFonts = "1.6.7"
 room = "2.6.1"
 lifecycleLivedataKtx = "2.8.1"
-ksp = "1.9.24-1.0.20"
+ksp = "2.0.0-1.0.21"
 composeFoundation = "1.6.7"
 icons = "1.7.0-beta02"
 datetime = "0.6.0"
@@ -52,5 +52,6 @@ kotlinx-datetime = {module = "org.jetbrains.kotlinx:kotlinx-datetime", version.r
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-serialization = {id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
+compose-compiler = {id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin"}
 ksp = {id = "com.google.devtools.ksp", version.ref = "ksp"}
 
