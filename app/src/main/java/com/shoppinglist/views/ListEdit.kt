@@ -173,8 +173,8 @@ fun ListEdit(
                         ) {
                             Text(
                                 text = "Benachrichtigung: ${
-                                    if (textNotifyField?.toInstant(TimeZone.currentSystemDefault())
-                                            ?.toEpochMilliseconds() == 0L
+                                    if ((textNotifyField?.toInstant(TimeZone.currentSystemDefault())
+                                            ?.toEpochMilliseconds() == 0L) or (textNotifyField == null)
                                     ) {
                                         "Keine"
                                     } else {
