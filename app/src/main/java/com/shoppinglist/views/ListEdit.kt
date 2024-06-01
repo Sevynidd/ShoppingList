@@ -100,6 +100,23 @@ fun ListEdit(
 
         val listItem by viewModel.listFromListID.collectAsState()
 
+        LaunchedEffect(args.listID) {
+            if ((listItem?.notifyDate != null) and ((listItem?.notifyDate
+                    ?: 0L) < System.currentTimeMillis())
+            ) {
+                listItem.let {
+                    viewModel.upsertList(
+                        RoomList(
+                            listID = args.listID,
+                            name = listItem!!.name,
+                            note = listItem!!.note,
+                            notifyDate = null
+                        )
+                    )
+                }
+            }
+        }
+
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = {
