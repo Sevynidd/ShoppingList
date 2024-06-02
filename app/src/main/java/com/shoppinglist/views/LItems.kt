@@ -133,7 +133,7 @@ fun LItems(
                                             listID = args.listID,
                                             name = textAddItem.text,
                                             note = "",
-                                            price = 0.0,
+                                            price = null,
                                             amount = 1,
                                             unitID = null,
                                             categoryID = null,

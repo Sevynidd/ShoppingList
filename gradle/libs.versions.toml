@@ -1,5 +1,5 @@
 [versions]
-agp = "8.5.0-beta02"
+agp = "8.5.0-rc01"
 coreSplashscreen = "1.0.1"
 datastorePreferences = "1.1.1"
 kotlin = "2.0.0"
