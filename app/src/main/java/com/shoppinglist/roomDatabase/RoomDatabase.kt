@@ -16,6 +16,7 @@ import com.shoppinglist.roomDatabase.entities.RoomUnit
         RoomCategory::class,
         RoomAddress::class,
         RoomGroup::class],
+    exportSchema = false,
     version = 1
 )
 abstract class RoomDatabase : RoomDatabase() {

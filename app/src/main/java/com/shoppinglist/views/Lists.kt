@@ -93,9 +93,14 @@ fun Lists(viewModel: RoomViewModel, navController: NavHostController) {
             mutableStateOf(false)
         }
         val timePickerState = rememberTimePickerState(
-            initialHour = Clock.System.now()
-                .toLocalDateTime(TimeZone.currentSystemDefault()).hour + 1,
-            initialMinute = 0
+            initialHour = if (Clock.System.now()
+                    .toLocalDateTime(TimeZone.currentSystemDefault()).hour == 23) {
+                0
+            } else {
+            Clock.System.now()
+                .toLocalDateTime(TimeZone.currentSystemDefault()).hour + 1
+        } ,
+        initialMinute = 0
         )
 
         var textNotifyField by remember { mutableStateOf(null as LocalDateTime?) }
