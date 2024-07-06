@@ -92,11 +92,6 @@ fun DraggableListItem(
 
     var showDeleteDialog by remember { mutableStateOf(false) }
 
-    val context = LocalContext.current
-
-    val colorDelete = Color(context.getColor(R.color.red))
-    val colorEdit = Color(context.getColor(R.color.green))
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -115,41 +110,16 @@ fun DraggableListItem(
                 }
             )
     ) {
-        val mod = Modifier
-            .width(50.dp)
-            .matchParentSize()
-            .clip(shape = RoundedCornerShape(12.dp))
-
         if (offsetX > 0f) {
             ButtonOnBox(
-                modifier = mod.background(colorEdit),
-                alignment = Alignment.CenterStart,
-                onClick = { onEdit() },
-                iconButtonModifier = Modifier
-                    .fillMaxHeight()
-                    .width(70.dp),
-                icon = {
-                    Icon(
-                        Icons.Default.Edit,
-                        "Edit"
-                    )
-                }
+                isEdit = true,
+                onClick = { onEdit() }
             )
 
         } else {
             ButtonOnBox(
-                modifier = mod.background(colorDelete),
-                alignment = Alignment.CenterEnd,
-                onClick = { showDeleteDialog = true },
-                iconButtonModifier = Modifier
-                    .fillMaxHeight()
-                    .width(70.dp),
-                icon = {
-                    Icon(
-                        Icons.Default.Delete,
-                        "Delete"
-                    )
-                }
+                isEdit = false,
+                onClick = { showDeleteDialog = true }
             )
         }
 
@@ -169,7 +139,7 @@ fun DraggableListItem(
                     }
                 ),
             headlineContent = { headline?.invoke() },
-            overlineContent = {  },
+            overlineContent = { },
             supportingContent = { supporting?.invoke() },
             trailingContent = { trailing?.invoke() },
             leadingContent = {
@@ -216,21 +186,46 @@ fun DraggableListItem(
 
 @Composable
 private fun ButtonOnBox(
-    modifier: Modifier,
-    alignment: Alignment,
-    onClick: () -> Unit,
-    iconButtonModifier: Modifier,
-    icon: @Composable () -> Unit
+    isEdit: Boolean = true,
+    onClick: () -> Unit
 ) {
-    Box(
-        modifier = modifier,
-        contentAlignment = alignment
-    ) {
-        IconButton(
-            onClick = onClick,
-            modifier = iconButtonModifier
-        ) {
-            icon()
+    val context = LocalContext.current
+
+    if (isEdit) {
+        Box(
+            modifier = Modifier.background(Color(context.getColor(R.color.green))),
+            contentAlignment = Alignment.CenterStart
+        )
+        {
+            IconButton(
+                onClick = onClick,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(70.dp)
+            ) {
+                Icon(
+                    Icons.Default.Edit,
+                    "Edit"
+                )
+            }
+        }
+    } else {
+        Box(
+            modifier = Modifier.background(Color(context.getColor(R.color.red))),
+            contentAlignment = Alignment.CenterEnd
+        )
+        {
+            IconButton(
+                onClick = onClick,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(70.dp)
+            ) {
+                Icon(
+                    Icons.Default.Delete,
+                    "Delete"
+                )
+            }
         }
     }
 }
