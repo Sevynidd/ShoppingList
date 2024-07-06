@@ -17,7 +17,7 @@ import com.shoppinglist.roomDatabase.entities.RoomUnit
         RoomAddress::class,
         RoomGroup::class],
     exportSchema = false,
-    version = 1
+    version = 2
 )
 abstract class RoomDatabase : RoomDatabase() {
     abstract val dao: RoomDao
