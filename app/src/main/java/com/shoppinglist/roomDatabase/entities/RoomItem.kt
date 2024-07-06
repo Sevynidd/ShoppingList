@@ -34,7 +34,7 @@ import androidx.room.PrimaryKey
 data class RoomItem(
     @PrimaryKey(autoGenerate = true)
     val itemID: Int = 0,
-    val price: Double?,
+    val price: Float = 0.0F,
     val name: String,
     val note: String?,
     val amount: Int = 1,

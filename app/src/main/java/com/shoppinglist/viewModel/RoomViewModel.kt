@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class RoomViewModel(private val repository: RoomRepository) : ViewModel() {
+
+    // region Lists
     val allLists: StateFlow<List<ListWithItemCount>> =
         repository.getAllLists().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
@@ -52,6 +54,10 @@ class RoomViewModel(private val repository: RoomRepository) : ViewModel() {
         }
     }
 
+    // endregion
+
+    // region Items
+
     private val _itemFromItemID = MutableStateFlow<RoomItem?>(null)
     val itemFromItemID: StateFlow<RoomItem?> get() = _itemFromItemID
 
@@ -74,5 +80,6 @@ class RoomViewModel(private val repository: RoomRepository) : ViewModel() {
             repository.deleteItem(item)
         }
     }
+    // endregion
 
 }

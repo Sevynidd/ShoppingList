@@ -133,7 +133,7 @@ fun LItems(
                                             listID = args.listID,
                                             name = textAddItem.text,
                                             note = "",
-                                            price = null,
+                                            price = 0.0F,
                                             amount = 1,
                                             unitID = null,
                                             categoryID = null,
@@ -157,7 +157,7 @@ fun LItems(
                                                     listID = args.listID,
                                                     name = textAddItem.text,
                                                     note = null,
-                                                    price = null,
+                                                    price = 0.0F,
                                                     amount = 1,
                                                     unitID = null,
                                                     categoryID = null,
@@ -234,7 +234,7 @@ private fun Content(
                                 item.itemID,
                                 item.name,
                                 item.note,
-                                item.price.toString(),
+                                item.price,
                                 item.amount,
                                 item.unitID ?: -1,
                                 item.categoryID ?: -1
@@ -244,7 +244,8 @@ private fun Content(
                     draggableItemTexts = DraggableItemTexts(
                         headline = item.name,
                         supporting = item.note ?: "",
-                        trailing = "${item.amount}x ${item.unitID ?: ""}"
+                        trailing = "${item.amount}x" +
+                                if (item.price != 0.0F ) " ${item.price} €" else ""
                     )
                 )
             }

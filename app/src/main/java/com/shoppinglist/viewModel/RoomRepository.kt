@@ -6,6 +6,8 @@ import com.shoppinglist.roomDatabase.RoomDatabase
 import kotlinx.coroutines.flow.Flow
 
 class RoomRepository(private val db: RoomDatabase) {
+
+    // region List
     suspend fun upsertList(list: RoomList) {
         db.dao.upsertList(list)
     }
@@ -18,6 +20,9 @@ class RoomRepository(private val db: RoomDatabase) {
 
     fun getListFromListID(listID: Int) = db.dao.getListFromListID(listID = listID)
 
+    // endregion
+
+    // region Item
     suspend fun upsertItem(item: RoomItem) {
         db.dao.upsertItem(item)
     }
@@ -29,5 +34,7 @@ class RoomRepository(private val db: RoomDatabase) {
     fun getAllItems(listID: Int) = db.dao.getAllItems(listID = listID)
 
     fun getItemFromItemID(itemID: Int) = db.dao.getItemFromItemID(itemID = itemID)
+
+    // endregion
 
 }

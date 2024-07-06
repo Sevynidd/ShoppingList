@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -22,12 +23,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.shoppinglist.ScreenItemEdit
-import com.shoppinglist.ScreenLItems
 import com.shoppinglist.roomDatabase.entities.RoomItem
 import com.shoppinglist.ui.theme.ShoppingListTheme
 import com.shoppinglist.viewModel.RoomViewModel
@@ -43,12 +46,15 @@ fun ItemEdit(
         var textItemName by remember { mutableStateOf(TextFieldValue("")) }
         var textItemNote by remember { mutableStateOf(TextFieldValue("")) }
         var textItemPrice by remember { mutableStateOf(TextFieldValue("")) }
+        var textItemAmount by remember { mutableStateOf(TextFieldValue("")) }
 
         LaunchedEffect(args.itemID) {
             viewModel.getItemFromItemID(args.itemID)
         }
 
         val listItem by viewModel.itemFromItemID.collectAsState()
+
+        val focusManager = LocalFocusManager.current
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -63,9 +69,9 @@ fun ItemEdit(
                                     listID = args.listID,
                                     name = textItemName.text,
                                     note = textItemNote.text,
-                                    price = textItemPrice.text.toDoubleOrNull(),
+                                    price = textItemPrice.text.toFloatOrNull()?: 0.0F,
                                     categoryID = null,
-                                    amount = 1,
+                                    amount = if ((textItemAmount.text == "") or (textItemAmount.text == "0")) 1 else textItemAmount.text.toInt(),
                                     unitID = null,
                                     groupID = null
                                 )
@@ -93,12 +99,9 @@ fun ItemEdit(
                                 textItemName = TextFieldValue(it.name)
                                 textItemNote = TextFieldValue(it.note ?: "")
                                 textItemPrice = TextFieldValue(
-                                    if (it.price == null) {
-                                        "0.0"
-                                    } else {
-                                        it.price.toString()
-                                    }
+                                    if (it.price == 0.0F) "0.0" else it.price.toString()
                                 )
+                                textItemAmount = TextFieldValue(it.amount.toString())
                             }
                         }
 
@@ -109,6 +112,9 @@ fun ItemEdit(
                                 textItemName = it
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                            keyboardActions = KeyboardActions {
+                                focusManager.moveFocus(FocusDirection.Next)
+                            },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth()
                         )
@@ -120,6 +126,9 @@ fun ItemEdit(
                                 textItemNote = it
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                            keyboardActions = KeyboardActions {
+                                focusManager.moveFocus(FocusDirection.Next)
+                            },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth()
                         )
@@ -130,7 +139,24 @@ fun ItemEdit(
                             onValueChange = {
                                 textItemPrice = it
                             },
+                            placeholder = { Text("0.0") },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                            keyboardActions = KeyboardActions {
+                                textItemPrice = TextFieldValue((textItemPrice.text.toFloatOrNull()?: "0.0").toString())
+                                focusManager.moveFocus(FocusDirection.Next)
+                            },
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        OutlinedTextField(
+                            value = textItemAmount,
+                            label = { Text(text = "Menge") },
+                            onValueChange = {
+                                textItemAmount = it
+                            },
+                            placeholder = { Text("0") },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth()
                         )
