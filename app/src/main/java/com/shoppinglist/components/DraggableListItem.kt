@@ -43,7 +43,6 @@ import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 /**
- * @param anchors List of Float-Values that defines, how much the ListItem can be dragged.
  * @param onDelete What should happen on delete-click?
  * @param onEdit What should happen on edit-click?
  * @param onListItemClick What should happen, when the ListItem itself is clicked?
@@ -54,7 +53,6 @@ import kotlin.math.roundToInt
  */
 @Composable
 fun DraggableListItem(
-    anchors: List<Float>? = listOf(0f, 180f, -180f),
     onDelete: () -> Unit?,
     onEdit: () -> Unit?,
     onListItemClick: (() -> Unit)? = null,
@@ -71,6 +69,7 @@ fun DraggableListItem(
         Text("")
     }
 ) {
+    val anchors: List<Float> = listOf(0f, 180f, -180f)
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -104,7 +103,7 @@ fun DraggableListItem(
                 onDragStopped = {
                     coroutineScope.launch {
                         val target =
-                            anchors?.minByOrNull { kotlin.math.abs(it - offsetX) } ?: 0f
+                            anchors.minByOrNull { kotlin.math.abs(it - offsetX) } ?: 0f
                         offsetX = target
                     }
                 }
