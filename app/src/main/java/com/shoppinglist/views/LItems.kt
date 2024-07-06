@@ -75,7 +75,7 @@ fun LItems(
                     title = { Text(text = "Liste: ${listFromListId?.name}") },
                     navigationIcon = {
                         IconButton(onClick = {
-                            navController.navigate(ScreenLists)
+                            navController.navigateUp()
                         }) {
                             Icon(Icons.AutoMirrored.Default.ArrowBack, "Zurück")
                         }

@@ -70,12 +70,7 @@ fun ItemEdit(
                                     groupID = null
                                 )
                             )
-
-                            navController.navigate(
-                                ScreenLItems(
-                                    listID = args.listID
-                                )
-                            )
+                            navController.navigateUp()
                         }) {
                             Icon(Icons.AutoMirrored.Default.ArrowBack, "Zurück")
                         }

@@ -134,7 +134,7 @@ fun ListEdit(
                                 )
                             )
 
-                            navController.navigate(ScreenLists)
+                            navController.navigateUp()
                         }) {
                             Icon(Icons.AutoMirrored.Default.ArrowBack, "Zurück")
                         }
