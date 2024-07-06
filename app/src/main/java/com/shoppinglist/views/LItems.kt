@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.shoppinglist.ScreenItemEdit
 import com.shoppinglist.ScreenLItems
-import com.shoppinglist.ScreenLists
+import com.shoppinglist.components.DraggableItemTexts
 import com.shoppinglist.components.DraggableListItem
 import com.shoppinglist.roomDatabase.entities.RoomItem
 import com.shoppinglist.ui.theme.ShoppingListTheme
@@ -94,7 +94,7 @@ fun LItems(
                             .fillMaxSize()
                             .padding(horizontal = 18.dp)
                     ) {
-                        Content(viewModel, args, navController)
+                        Content(viewModel, navController)
                     }
                 }
             },
@@ -200,7 +200,6 @@ fun LItems(
 @Composable
 private fun Content(
     viewModel: RoomViewModel,
-    args: ScreenLItems,
     navController: NavHostController
 ) {
     val listOfItems by viewModel.allItems.collectAsState()
@@ -242,9 +241,11 @@ private fun Content(
                             )
                         )
                     },
-                    headline = { Text(item.name) },
-                    supporting = { Text(item.note ?: "") },
-                    trailing = { Text("${item.amount}x ${item.unitID ?: ""}") }
+                    draggableItemTexts = DraggableItemTexts(
+                        headline = item.name,
+                        supporting = item.note ?: "",
+                        trailing = "${item.amount}x ${item.unitID ?: ""}"
+                    )
                 )
             }
         }

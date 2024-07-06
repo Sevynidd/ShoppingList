@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.shoppinglist.ScreenLItems
 import com.shoppinglist.ScreenListEdit
+import com.shoppinglist.components.DraggableItemTexts
 import com.shoppinglist.components.DraggableListItem
 import com.shoppinglist.roomDatabase.entities.RoomList
 import com.shoppinglist.ui.theme.ShoppingListTheme
@@ -94,13 +95,14 @@ fun Lists(viewModel: RoomViewModel, navController: NavHostController) {
         }
         val timePickerState = rememberTimePickerState(
             initialHour = if (Clock.System.now()
-                    .toLocalDateTime(TimeZone.currentSystemDefault()).hour == 23) {
+                    .toLocalDateTime(TimeZone.currentSystemDefault()).hour == 23
+            ) {
                 0
             } else {
-            Clock.System.now()
-                .toLocalDateTime(TimeZone.currentSystemDefault()).hour + 1
-        } ,
-        initialMinute = 0
+                Clock.System.now()
+                    .toLocalDateTime(TimeZone.currentSystemDefault()).hour + 1
+            },
+            initialMinute = 0
         )
 
         var textNotifyField by remember { mutableStateOf(null as LocalDateTime?) }
@@ -365,15 +367,11 @@ private fun Content(navController: NavHostController, viewModel: RoomViewModel) 
                             )
                         )
                     },
-                    headline = {
-                        Text(text = list.list.name)
-                    },
-                    supporting = {
-                        Text(list.list.note)
-                    },
-                    trailing = {
-                        Text("Anzahl: ${list.itemCount}")
-                    }
+                    draggableItemTexts = DraggableItemTexts(
+                        headline = list.list.name,
+                        supporting = list.list.note,
+                        trailing = "Anzahl: ${list.itemCount}"
+                    )
                 )
             }
         }

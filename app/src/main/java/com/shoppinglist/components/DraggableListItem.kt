@@ -46,28 +46,14 @@ import kotlin.math.roundToInt
  * @param onDelete What should happen on delete-click?
  * @param onEdit What should happen on edit-click?
  * @param onListItemClick What should happen, when the ListItem itself is clicked?
- * @param headline Headline of ListItem
- * @param supporting Supporting text of ListItem
- * @param trailing Trailing text of ListItem
- * @param overline Overline text of ListItem
+ * @param draggableItemTexts Object of texts, which are used for the headline, supporting and trailing text of the ListItem
  */
 @Composable
 fun DraggableListItem(
     onDelete: () -> Unit?,
     onEdit: () -> Unit?,
     onListItemClick: (() -> Unit)? = null,
-    headline: @Composable (() -> Unit)? = {
-        Text("")
-    },
-    supporting: @Composable (() -> Unit)? = {
-        Text("")
-    },
-    trailing: @Composable (() -> Unit)? = {
-        Text("")
-    },
-    overline: @Composable (() -> Unit)? = {
-        Text("")
-    }
+    draggableItemTexts: DraggableItemTexts
 ) {
     val anchors: List<Float> = listOf(0f, 180f, -180f)
 
@@ -114,7 +100,6 @@ fun DraggableListItem(
                 isEdit = true,
                 onClick = { onEdit() }
             )
-
         } else {
             ButtonOnBox(
                 isEdit = false,
@@ -137,10 +122,17 @@ fun DraggableListItem(
                         Modifier
                     }
                 ),
-            headlineContent = { headline?.invoke() },
-            overlineContent = { },
-            supportingContent = { supporting?.invoke() },
-            trailingContent = { trailing?.invoke() },
+            headlineContent = { Text(draggableItemTexts.headline) },
+            supportingContent = {
+                if (draggableItemTexts.supporting.isNotEmpty()) {
+                    Text(draggableItemTexts.supporting)
+                }
+            },
+            trailingContent = {
+                if (draggableItemTexts.trailing.isNotEmpty()) {
+                    Text(draggableItemTexts.trailing)
+                }
+            },
             leadingContent = {
                 Icon(
                     Icons.Default.ShoppingCart,
