@@ -95,14 +95,21 @@ fun DraggableListItem(
                 }
             )
     ) {
+        val mod = Modifier
+            .width(50.dp)
+            .matchParentSize()
+            .clip(shape = RoundedCornerShape(12.dp))
+
         if (offsetX > 0f) {
             ButtonOnBox(
                 isEdit = true,
+                modifier = mod,
                 onClick = { onEdit() }
             )
         } else {
             ButtonOnBox(
                 isEdit = false,
+                modifier = mod,
                 onClick = { showDeleteDialog = true }
             )
         }
@@ -178,45 +185,30 @@ fun DraggableListItem(
 @Composable
 private fun ButtonOnBox(
     isEdit: Boolean = true,
+    modifier: Modifier,
     onClick: () -> Unit
 ) {
     val context = LocalContext.current
 
-    if (isEdit) {
-        Box(
-            modifier = Modifier.background(Color(context.getColor(R.color.green))),
-            contentAlignment = Alignment.CenterStart
-        )
-        {
-            IconButton(
-                onClick = onClick,
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(70.dp)
-            ) {
-                Icon(
-                    Icons.Default.Edit,
-                    "Edit"
-                )
-            }
-        }
-    } else {
-        Box(
-            modifier = Modifier.background(Color(context.getColor(R.color.red))),
-            contentAlignment = Alignment.CenterEnd
-        )
-        {
-            IconButton(
-                onClick = onClick,
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(70.dp)
-            ) {
-                Icon(
-                    Icons.Default.Delete,
-                    "Delete"
-                )
-            }
+    Box(
+        modifier = modifier.background(
+            color = if (isEdit)
+                Color(context.getColor(R.color.green)) else
+                Color(context.getColor(R.color.red))
+        ),
+        contentAlignment = if (isEdit) Alignment.CenterStart else Alignment.CenterEnd
+    )
+    {
+        IconButton(
+            onClick = onClick,
+            modifier = Modifier
+                .fillMaxHeight()
+                .width(70.dp)
+        ) {
+            Icon(
+                imageVector = if (isEdit) Icons.Default.Edit else Icons.Default.Delete,
+                contentDescription = if (isEdit) "Edit" else "Delete"
+            )
         }
     }
 }
