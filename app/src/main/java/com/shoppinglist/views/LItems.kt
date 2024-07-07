@@ -3,10 +3,12 @@ package com.shoppinglist.views
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -63,22 +65,31 @@ fun LItems(
         }
 
         LaunchedEffect(args.listID) {
-            viewModel.getListFromListID(args.listID)
+            viewModel.getListFromListIDAndItemsSum(args.listID)
         }
 
-        val listFromListId by viewModel.listFromListID.collectAsState()
+        val listFromListIDAndItemsSum by viewModel.listFromListIDAndItemsSum.collectAsState()
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = {
                 TopAppBar(
-                    title = { Text(text = "Liste: ${listFromListId?.name}") },
+                    title = { Text(text = "Liste: ${listFromListIDAndItemsSum?.list?.name}") },
                     navigationIcon = {
                         IconButton(onClick = {
                             navController.navigateUp()
                         }) {
                             Icon(Icons.AutoMirrored.Default.ArrowBack, "Zurück")
                         }
+                    },
+                    actions = {
+                        Text(
+                            if ((listFromListIDAndItemsSum?.sumPrice ?: 0.0F) > 0.0F) {
+                                    "Summe: ${"%.2f".format(listFromListIDAndItemsSum?.sumPrice)} €"
+                                } else ""
+                        )
+                        Spacer(modifier = Modifier.size(16.dp))
+
                     }
                 )
             },
@@ -245,7 +256,7 @@ private fun Content(
                         headline = item.name,
                         supporting = item.note ?: "",
                         trailing = "${item.amount}x" +
-                                if (item.price != 0.0F ) " ${item.price} €" else ""
+                                if (item.price != 0.0F) " ${"%.2f".format(item.price)} €" else ""
                     )
                 )
             }

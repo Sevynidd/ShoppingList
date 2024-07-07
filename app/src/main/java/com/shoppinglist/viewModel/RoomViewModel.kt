@@ -3,6 +3,7 @@ package com.shoppinglist.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shoppinglist.roomDatabase.entities.ListWithItemCount
+import com.shoppinglist.roomDatabase.entities.ListWithPriceSum
 import com.shoppinglist.roomDatabase.entities.RoomItem
 import com.shoppinglist.roomDatabase.entities.RoomList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -50,6 +51,17 @@ class RoomViewModel(private val repository: RoomRepository) : ViewModel() {
         viewModelScope.launch {
             repository.getListFromListID(listID).collect { listEntry ->
                 _listFromListID.value = listEntry
+            }
+        }
+    }
+
+    private val _listFromListIDAndItemsSum = MutableStateFlow<ListWithPriceSum?>(null)
+    val listFromListIDAndItemsSum: StateFlow<ListWithPriceSum?> get() = _listFromListIDAndItemsSum
+
+    fun getListFromListIDAndItemsSum(listID: Int) {
+        viewModelScope.launch {
+            repository.getListFromListIDAndItemsSum(listID).collect { listEntry ->
+                _listFromListIDAndItemsSum.value = listEntry
             }
         }
     }

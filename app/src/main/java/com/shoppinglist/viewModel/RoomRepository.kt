@@ -20,6 +20,8 @@ class RoomRepository(private val db: RoomDatabase) {
 
     fun getListFromListID(listID: Int) = db.dao.getListFromListID(listID = listID)
 
+    fun getListFromListIDAndItemsSum(listID: Int) = db.dao.getListFromListIDAndItemsSum(listID = listID)
+
     // endregion
 
     // region Item

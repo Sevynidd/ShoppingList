@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
 import com.shoppinglist.roomDatabase.entities.ListWithItemCount
+import com.shoppinglist.roomDatabase.entities.ListWithPriceSum
 import com.shoppinglist.roomDatabase.entities.RoomItem
 import com.shoppinglist.roomDatabase.entities.RoomList
 import kotlinx.coroutines.flow.Flow
@@ -22,6 +23,9 @@ interface RoomDao {
 
     @Query("SELECT * FROM List WHERE listID = :listID")
     fun getListFromListID(listID: Int): Flow<RoomList>
+
+    @Query("SELECT l.*, SUM(i.price) as sumPrice FROM List l LEFT JOIN Item i ON l.listID = i.listID WHERE l.listID = :listID GROUP BY l.listID")
+    fun getListFromListIDAndItemsSum(listID: Int): Flow<ListWithPriceSum>
 
     @Upsert
     suspend fun upsertItem(item: RoomItem)
