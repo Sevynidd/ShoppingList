@@ -4,8 +4,8 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
-import com.shoppinglist.roomDatabase.entities.ListWithItemCount
-import com.shoppinglist.roomDatabase.entities.ListWithPriceSum
+import com.shoppinglist.roomDatabase.entities.embedded.ListWithItemCount
+import com.shoppinglist.roomDatabase.entities.embedded.ListWithPriceSum
 import com.shoppinglist.roomDatabase.entities.RoomItem
 import com.shoppinglist.roomDatabase.entities.RoomList
 import kotlinx.coroutines.flow.Flow

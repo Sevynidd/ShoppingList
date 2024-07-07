@@ -1,6 +1,7 @@
-package com.shoppinglist.roomDatabase.entities
+package com.shoppinglist.roomDatabase.entities.embedded
 
 import androidx.room.Embedded
+import com.shoppinglist.roomDatabase.entities.RoomList
 
 data class ListWithPriceSum(
     @Embedded

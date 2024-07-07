@@ -2,8 +2,8 @@ package com.shoppinglist.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.shoppinglist.roomDatabase.entities.ListWithItemCount
-import com.shoppinglist.roomDatabase.entities.ListWithPriceSum
+import com.shoppinglist.roomDatabase.entities.embedded.ListWithItemCount
+import com.shoppinglist.roomDatabase.entities.embedded.ListWithPriceSum
 import com.shoppinglist.roomDatabase.entities.RoomItem
 import com.shoppinglist.roomDatabase.entities.RoomList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
