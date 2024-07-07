@@ -68,7 +68,8 @@ fun ItemEdit(
                                     listID = args.listID,
                                     name = textItemName.text,
                                     note = textItemNote.text,
-                                    price = textItemPrice.text.toFloatOrNull()?: 0.0F,
+                                    price = textItemPrice.text.replace(",", ".").toFloatOrNull()
+                                        ?: 0.0F,
                                     categoryID = null,
                                     amount = if ((textItemAmount.text == "") or (textItemAmount.text == "0")) 1 else textItemAmount.text.toInt(),
                                     unitID = null,
@@ -98,7 +99,7 @@ fun ItemEdit(
                                 textItemName = TextFieldValue(it.name)
                                 textItemNote = TextFieldValue(it.note ?: "")
                                 textItemPrice = TextFieldValue(
-                                    if (it.price == 0.0F) "0.0" else it.price.toString()
+                                    if (it.price == 0.0F) "0.00" else it.price.toString()
                                 )
                                 textItemAmount = TextFieldValue(it.amount.toString())
                             }
@@ -138,10 +139,15 @@ fun ItemEdit(
                             onValueChange = {
                                 textItemPrice = it
                             },
-                            placeholder = { Text("0.0") },
+                            placeholder = { Text("0.00") },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                             keyboardActions = KeyboardActions {
-                                textItemPrice = TextFieldValue((textItemPrice.text.toFloatOrNull()?: "0.0").toString())
+                                textItemPrice = TextFieldValue(
+                                    "%.2f".format(
+                                        textItemPrice.text.replace(",", ".").toFloatOrNull()
+                                            ?: 0.0F
+                                    )
+                                )
                                 focusManager.moveFocus(FocusDirection.Next)
                             },
                             singleLine = true,

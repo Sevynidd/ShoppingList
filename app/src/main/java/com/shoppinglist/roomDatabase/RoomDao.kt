@@ -24,7 +24,7 @@ interface RoomDao {
     @Query("SELECT * FROM List WHERE listID = :listID")
     fun getListFromListID(listID: Int): Flow<RoomList>
 
-    @Query("SELECT l.*, SUM(i.price) as sumPrice FROM List l LEFT JOIN Item i ON l.listID = i.listID WHERE l.listID = :listID GROUP BY l.listID")
+    @Query("SELECT l.*, SUM(i.amount*i.price) as sumPrice FROM List l LEFT JOIN Item i ON l.listID = i.listID WHERE l.listID = :listID GROUP BY l.listID")
     fun getListFromListIDAndItemsSum(listID: Int): Flow<ListWithPriceSum>
 
     @Upsert
