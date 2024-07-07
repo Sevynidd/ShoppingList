@@ -72,7 +72,6 @@ fun ItemEdit(
                                         ?: 0.0F,
                                     categoryID = null,
                                     amount = if ((textItemAmount.text == "") or (textItemAmount.text == "0")) 1 else textItemAmount.text.toInt(),
-                                    unitID = null,
                                     groupID = null
                                 )
                             )

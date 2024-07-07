@@ -13,12 +13,6 @@ import androidx.room.PrimaryKey
         onDelete = ForeignKey.CASCADE
     ),
     ForeignKey(
-        entity = RoomUnit::class,
-        parentColumns = ["unitID"],
-        childColumns = ["unitID"],
-        onDelete = ForeignKey.SET_NULL
-    ),
-    ForeignKey(
         entity = RoomCategory::class,
         parentColumns = ["categoryID"],
         childColumns = ["categoryID"],
@@ -39,7 +33,6 @@ data class RoomItem(
     val note: String?,
     val amount: Int = 1,
     val listID: Int,
-    val unitID: Int?,
     val categoryID: Int?,
     val groupID: Int?
 )

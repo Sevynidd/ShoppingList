@@ -93,7 +93,6 @@ data class ScreenItemEdit(
     val note: String?,
     val price: Float,
     val amount: Int,
-    val unitID: Int,
     val categoryID: Int
 )
 

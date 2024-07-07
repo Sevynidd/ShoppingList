@@ -140,6 +140,11 @@ fun DraggableListItem(
                     Text(draggableItemTexts.trailing)
                 }
             },
+            overlineContent = {
+                if (draggableItemTexts.overline.isNotEmpty()) {
+                    Text(draggableItemTexts.overline)
+                }
+            },
             leadingContent = {
                 Icon(
                     Icons.Default.ShoppingCart,

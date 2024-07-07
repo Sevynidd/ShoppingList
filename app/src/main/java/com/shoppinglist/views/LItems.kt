@@ -146,7 +146,6 @@ fun LItems(
                                             note = "",
                                             price = 0.0F,
                                             amount = 1,
-                                            unitID = null,
                                             categoryID = null,
                                             groupID = null
                                         )
@@ -170,7 +169,6 @@ fun LItems(
                                                     note = null,
                                                     price = 0.0F,
                                                     amount = 1,
-                                                    unitID = null,
                                                     categoryID = null,
                                                     groupID = null
                                                 )
@@ -232,7 +230,6 @@ private fun Content(
                                 note = item.note,
                                 amount = item.amount,
                                 price = item.price,
-                                unitID = item.unitID,
                                 categoryID = item.categoryID,
                                 groupID = item.groupID
                             )
@@ -247,7 +244,6 @@ private fun Content(
                                 item.note,
                                 item.price,
                                 item.amount,
-                                item.unitID ?: -1,
                                 item.categoryID ?: -1
                             )
                         )
