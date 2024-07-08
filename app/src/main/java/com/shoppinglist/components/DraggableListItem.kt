@@ -17,10 +17,12 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -36,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.shoppinglist.R
@@ -46,14 +49,16 @@ import kotlin.math.roundToInt
  * @param onDelete What should happen on delete-click?
  * @param onEdit What should happen on edit-click?
  * @param onListItemClick What should happen, when the ListItem itself is clicked?
- * @param draggableItemTexts Object of texts, which are used for the headline, supporting and trailing text of the ListItem
+ * @param onCheckBoxClick What should happen on checkbox-click, when isItem = true?
+ * @param draggableItemInfo Object of infos, which are used for the headline, supporting and trailing text of the ListItem
  */
 @Composable
 fun DraggableListItem(
     onDelete: () -> Unit?,
     onEdit: () -> Unit?,
     onListItemClick: (() -> Unit)? = null,
-    draggableItemTexts: DraggableItemTexts
+    onCheckBoxClick: (() -> Unit)? = null,
+    draggableItemInfo: DraggableItemInfo
 ) {
     val anchors: List<Float> = listOf(0f, 180f, -180f)
 
@@ -129,28 +134,72 @@ fun DraggableListItem(
                         Modifier
                     }
                 ),
-            headlineContent = { Text(draggableItemTexts.headline) },
+            colors = if (draggableItemInfo.isItem) {
+                if (draggableItemInfo.isChecked) {
+                    ListItemDefaults.colors(containerColor = darkerContainerColour)
+                } else {
+                    ListItemDefaults.colors()
+                }
+            } else {
+                ListItemDefaults.colors()
+            },
+            headlineContent = {
+                Text(
+                    text = draggableItemInfo.headline,
+                    style = if (draggableItemInfo.isItem) {
+                        if (draggableItemInfo.isChecked) {
+                            LocalTextStyle.current.copy(textDecoration = TextDecoration.LineThrough)
+                        } else {
+                            LocalTextStyle.current
+                        }
+                    } else {
+                        LocalTextStyle.current
+                    }
+                )
+            },
             supportingContent = {
-                if (draggableItemTexts.supporting.isNotEmpty()) {
-                    Text(draggableItemTexts.supporting)
+                if (draggableItemInfo.supporting.isNotEmpty()) {
+                    Text(
+                        text = draggableItemInfo.supporting,
+                        style = if (draggableItemInfo.isItem) {
+                            if (draggableItemInfo.isChecked) {
+                                LocalTextStyle.current.copy(textDecoration = TextDecoration.LineThrough)
+                            } else {
+                                LocalTextStyle.current
+                            }
+                        } else {
+                            LocalTextStyle.current
+                        }
+                    )
                 }
             },
             trailingContent = {
-                if (draggableItemTexts.trailing.isNotEmpty()) {
-                    Text(draggableItemTexts.trailing)
+                if (draggableItemInfo.trailing.isNotEmpty()) {
+                    Text(draggableItemInfo.trailing)
                 }
             },
             overlineContent = {
-                if (draggableItemTexts.overline.isNotEmpty()) {
-                    Text(draggableItemTexts.overline)
+                if (draggableItemInfo.overline.isNotEmpty()) {
+                    Text(draggableItemInfo.overline)
                 }
             },
             leadingContent = {
-                Icon(
-                    Icons.Default.ShoppingCart,
-                    contentDescription = "ShoppingCart",
-                    tint = MaterialTheme.colorScheme.surfaceTint
-                )
+                if (draggableItemInfo.isItem) {
+                    Checkbox(
+                        checked = draggableItemInfo.isChecked,
+                        onCheckedChange = {
+                            if (onCheckBoxClick != null) {
+                                onCheckBoxClick()
+                            }
+                        }
+                    )
+                } else {
+                    Icon(
+                        Icons.Default.ShoppingCart,
+                        contentDescription = "ShoppingCart",
+                        tint = MaterialTheme.colorScheme.surfaceTint
+                    )
+                }
             },
             tonalElevation = 4.dp
         )

@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.shoppinglist.ScreenItemEdit
 import com.shoppinglist.ScreenLItems
-import com.shoppinglist.components.DraggableItemTexts
+import com.shoppinglist.components.DraggableItemInfo
 import com.shoppinglist.components.DraggableListItem
 import com.shoppinglist.roomDatabase.entities.RoomItem
 import com.shoppinglist.ui.theme.ShoppingListTheme
@@ -230,6 +230,7 @@ private fun Content(
                                 note = item.note,
                                 amount = item.amount,
                                 price = item.price,
+                                isChecked = item.isChecked,
                                 categoryID = item.categoryID,
                                 groupID = item.groupID
                             )
@@ -248,11 +249,27 @@ private fun Content(
                             )
                         )
                     },
-                    draggableItemTexts = DraggableItemTexts(
+                    onCheckBoxClick = {
+                        viewModel.upsertItem(
+                            RoomItem(
+                                itemID = item.itemID,
+                                listID = item.listID,
+                                name = item.name,
+                                note = item.note,
+                                amount = item.amount,
+                                price = item.price,
+                                isChecked = item.isChecked.not(),
+                                categoryID = item.categoryID,
+                                groupID = item.groupID
+                            )
+                        )
+                    },
+                    draggableItemInfo = DraggableItemInfo(
                         headline = item.name,
                         supporting = item.note ?: "",
                         trailing = "${item.amount}x" +
-                                if (item.price != 0.0F) " ${"%.2f".format(item.price)} €" else ""
+                                if (item.price != 0.0F) " ${"%.2f".format(item.price)} €" else "",
+                        isChecked = item.isChecked
                     )
                 )
             }

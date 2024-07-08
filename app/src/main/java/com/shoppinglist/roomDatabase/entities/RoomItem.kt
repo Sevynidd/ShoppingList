@@ -32,6 +32,7 @@ data class RoomItem(
     val name: String,
     val note: String?,
     val amount: Int = 1,
+    val isChecked: Boolean = false,
     val listID: Int,
     val categoryID: Int?,
     val groupID: Int?

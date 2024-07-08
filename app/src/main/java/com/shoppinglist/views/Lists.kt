@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeGesturesPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -54,7 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.shoppinglist.ScreenLItems
 import com.shoppinglist.ScreenListEdit
-import com.shoppinglist.components.DraggableItemTexts
+import com.shoppinglist.components.DraggableItemInfo
 import com.shoppinglist.components.DraggableListItem
 import com.shoppinglist.roomDatabase.entities.RoomList
 import com.shoppinglist.ui.theme.ShoppingListTheme
@@ -348,7 +346,6 @@ private fun Content(navController: NavHostController, viewModel: RoomViewModel) 
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(listofLists) { list ->
-
                 DraggableListItem(
                     onDelete = {
                         viewModel.deleteList(
@@ -374,10 +371,11 @@ private fun Content(navController: NavHostController, viewModel: RoomViewModel) 
                             )
                         )
                     },
-                    draggableItemTexts = DraggableItemTexts(
+                    draggableItemInfo = DraggableItemInfo(
                         headline = list.list.name,
                         supporting = list.list.note,
-                        trailing = "Anzahl: ${list.itemCount}"
+                        trailing = "Anzahl: ${list.itemCount}",
+                        isItem = false
                     )
                 )
             }
