@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
             applicationContext,
             RoomDatabase::class.java,
             name = "ShoppingList.db"
-        ).fallbackToDestructiveMigration().build()
+        ).build()
     }
     private val viewModel by viewModels<RoomViewModel>(
         factoryProducer = {

@@ -41,6 +41,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.shoppinglist.ScreenItemEdit
@@ -81,15 +82,6 @@ fun LItems(
                         }) {
                             Icon(Icons.AutoMirrored.Default.ArrowBack, "Zurück")
                         }
-                    },
-                    actions = {
-                        Text(
-                            if ((listFromListIDAndItemsSum?.sumPrice ?: 0.0F) > 0.0F) {
-                                    "Summe: ${"%.2f".format(listFromListIDAndItemsSum?.sumPrice)} €"
-                                } else ""
-                        )
-                        Spacer(modifier = Modifier.size(16.dp))
-
                     }
                 )
             },
@@ -114,7 +106,7 @@ fun LItems(
                     modifier = Modifier
                         .clip(shape = RoundedCornerShape(16.dp))
                         .fillMaxWidth()
-                        .wrapContentHeight()
+                        .wrapContentHeight(Alignment.CenterVertically)
                         .imePadding(),
                     content = {
                         Column(
@@ -213,11 +205,14 @@ private fun Content(
 ) {
     val listOfItems by viewModel.allItems.collectAsState()
 
+    val listFromListIDAndItemsSum by viewModel.listFromListIDAndItemsSum.collectAsState()
+
     if (listOfItems.isNotEmpty()) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalAlignment = Alignment.End
         ) {
             items(listOfItems) { item ->
                 DraggableListItem(
@@ -271,6 +266,16 @@ private fun Content(
                                 if (item.price != 0.0F) " ${"%.2f".format(item.price)} €" else "",
                         isChecked = item.isChecked
                     )
+                )
+            }
+
+            item {
+                Text(
+                    if ((listFromListIDAndItemsSum?.sumPrice ?: 0.0F) > 0.0F) {
+                        "Summe: ${"%.2f".format(listFromListIDAndItemsSum?.sumPrice)} €"
+                    } else {
+                        ""
+                    }
                 )
             }
         }
