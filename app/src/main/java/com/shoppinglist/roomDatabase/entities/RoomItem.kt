@@ -2,32 +2,35 @@ package com.shoppinglist.roomDatabase.entities
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "Item",
-    foreignKeys = [ForeignKey(
+    tableName = "Item", foreignKeys = [ForeignKey(
         entity = RoomList::class,
         parentColumns = ["listID"],
         childColumns = ["listID"],
         onDelete = ForeignKey.CASCADE
-    ),
-    ForeignKey(
+    ), ForeignKey(
         entity = RoomCategory::class,
         parentColumns = ["categoryID"],
         childColumns = ["categoryID"],
         onDelete = ForeignKey.SET_NULL
-    ),
-    ForeignKey(
+    ), ForeignKey(
         entity = RoomGroup::class,
         parentColumns = ["groupID"],
         childColumns = ["groupID"],
         onDelete = ForeignKey.SET_NULL
+    )], indices = [Index(
+        value = ["listID"]
+    ), Index(
+        value = ["categoryID"]
+    ), Index(
+        value = ["groupID"]
     )]
 )
 data class RoomItem(
-    @PrimaryKey(autoGenerate = true)
-    val itemID: Int = 0,
+    @PrimaryKey(autoGenerate = true) val itemID: Int = 0,
     val price: Float = 0.0F,
     val name: String,
     val note: String?,

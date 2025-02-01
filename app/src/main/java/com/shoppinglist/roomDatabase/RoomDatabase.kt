@@ -11,11 +11,7 @@ import com.shoppinglist.roomDatabase.entities.RoomItem
 import com.shoppinglist.roomDatabase.entities.RoomList
 
 @Database(
-    entities = [RoomList::class,
-        RoomItem::class,
-        RoomCategory::class,
-        RoomAddress::class,
-        RoomGroup::class],
+    entities = [RoomList::class, RoomItem::class, RoomCategory::class, RoomAddress::class, RoomGroup::class],
     exportSchema = false,
     version = 1
 )
@@ -32,7 +28,7 @@ abstract class RoomDatabase : RoomDatabase() {
                     context.applicationContext,
                     com.shoppinglist.roomDatabase.RoomDatabase::class.java,
                     "ShoppingList.db"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 instance
             }

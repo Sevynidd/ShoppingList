@@ -22,7 +22,7 @@ object HiltModule {
             context,
             RoomDatabase::class.java,
             "ShoppingList.db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Provides
