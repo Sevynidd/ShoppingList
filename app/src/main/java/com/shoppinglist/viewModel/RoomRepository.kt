@@ -1,41 +1,44 @@
 package com.shoppinglist.viewModel
 
+import com.shoppinglist.roomDatabase.RoomDao
 import com.shoppinglist.roomDatabase.entities.RoomItem
 import com.shoppinglist.roomDatabase.entities.RoomList
 import com.shoppinglist.roomDatabase.RoomDatabase
-import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class RoomRepository(private val db: RoomDatabase) {
+@Singleton
+class RoomRepository @Inject constructor(private val dao: RoomDao) {
 
     // region List
     suspend fun upsertList(list: RoomList) {
-        db.dao.upsertList(list)
+        dao.upsertList(list)
     }
 
     suspend fun deleteList(list: RoomList) {
-        db.dao.deleteList(list)
+        dao.deleteList(list)
     }
 
-    fun getAllLists() = db.dao.getAllLists()
+    fun getAllLists() = dao.getAllLists()
 
-    fun getListFromListID(listID: Int) = db.dao.getListFromListID(listID = listID)
+    fun getListFromListID(listID: Int) = dao.getListFromListID(listID = listID)
 
-    fun getListFromListIDAndItemsSum(listID: Int) = db.dao.getListFromListIDAndItemsSum(listID = listID)
+    fun getListFromListIDAndItemsSum(listID: Int) = dao.getListFromListIDAndItemsPrice(listID = listID)
 
     // endregion
 
     // region Item
     suspend fun upsertItem(item: RoomItem) {
-        db.dao.upsertItem(item)
+        dao.upsertItem(item)
     }
 
     suspend fun deleteItem(item: RoomItem) {
-        db.dao.deleteItem(item)
+        dao.deleteItem(item)
     }
 
-    fun getAllItems(listID: Int) = db.dao.getAllItems(listID = listID)
+    fun getAllItems(listID: Int) = dao.getAllItems(listID = listID)
 
-    fun getItemFromItemID(itemID: Int) = db.dao.getItemFromItemID(itemID = itemID)
+    fun getItemFromItemID(itemID: Int) = dao.getItemFromItemID(itemID = itemID)
 
     // endregion
 

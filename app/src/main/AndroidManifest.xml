@@ -6,12 +6,13 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/shopping_cart_icon"
+        android:icon="@mipmap/shoppingcart_icon_round"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/shopping_cart_icon"
+        android:roundIcon="@mipmap/shoppingcart_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShoppingList"
-        tools:targetApi="31">
+        tools:targetApi="35"
+        android:name=".Shoppinglist">
         <activity
             android:name=".MainActivity"
             android:exported="true"

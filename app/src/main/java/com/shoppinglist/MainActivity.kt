@@ -21,26 +21,13 @@ import com.shoppinglist.views.ItemEdit
 import com.shoppinglist.views.LItems
 import com.shoppinglist.views.ListEdit
 import com.shoppinglist.views.Lists
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.serialization.Serializable
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val db by lazy {
-        Room.databaseBuilder(
-            applicationContext,
-            RoomDatabase::class.java,
-            name = "ShoppingList.db"
-        ).build()
-    }
-    private val viewModel by viewModels<RoomViewModel>(
-        factoryProducer = {
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    @Suppress("UNCHECKED_CAST")
-                    return RoomViewModel(RoomRepository(db)) as T
-                }
-            }
-        }
-    )
+    private val roomViewModel: RoomViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,22 +41,22 @@ class MainActivity : ComponentActivity() {
                     startDestination = ScreenLists
                 ) {
                     composable<ScreenLists> {
-                        Lists(viewModel, navController)
+                        Lists(roomViewModel, navController)
                     }
 
                     composable<ScreenLItems> {
                         val args = it.toRoute<ScreenLItems>()
-                        LItems(args, viewModel, navController)
+                        LItems(args, roomViewModel, navController)
                     }
 
                     composable<ScreenItemEdit> {
                         val args = it.toRoute<ScreenItemEdit>()
-                        ItemEdit(args, viewModel, navController)
+                        ItemEdit(args, roomViewModel, navController)
                     }
 
                     composable<ScreenListEdit> {
                         val args = it.toRoute<ScreenListEdit>()
-                        ListEdit(args = args, viewModel = viewModel, navController = navController)
+                        ListEdit(args = args, viewModel = roomViewModel, navController = navController)
                     }
                 }
             }

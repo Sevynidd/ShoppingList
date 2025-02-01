@@ -12,10 +12,10 @@ import kotlinx.coroutines.flow.map
 class StoreData(private val context: Context) {
     companion object {
         private val Context.datastore: DataStore<Preferences> by preferencesDataStore("DataStore")
-        val API_KEY = stringPreferencesKey("api_key")
+        //val API_KEY = stringPreferencesKey("api_key")
     }
 
-    val getApiKey: Flow<String?> = context.datastore.data
+    /*val getApiKey: Flow<String?> = context.datastore.data
         .map { preferences ->
             preferences[API_KEY] ?: ""
         }
@@ -24,5 +24,5 @@ class StoreData(private val context: Context) {
         context.datastore.edit { preferences ->
             preferences[API_KEY] = key
         }
-    }
+    }*/
 }

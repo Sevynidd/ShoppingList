@@ -3,8 +3,8 @@
     <style name="Theme.ShoppingList.MySplash" parent="Theme.SplashScreen">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="windowSplashScreenBackground">@color/splash</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/shopping_cart</item>
+        <item name="windowSplashScreenBackground">@color/splashbackground</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/shoppingcart</item>
         <item name="postSplashScreenTheme">@style/Theme.ShoppingList</item>
     </style>
 </resources>
