@@ -12,9 +12,9 @@ import androidx.room.PrimaryKey
         childColumns = ["listID"],
         onDelete = ForeignKey.CASCADE
     ), ForeignKey(
-        entity = RoomCategory::class,
-        parentColumns = ["categoryID"],
-        childColumns = ["categoryID"],
+        entity = RoomTag::class,
+        parentColumns = ["tagID"],
+        childColumns = ["tagID"],
         onDelete = ForeignKey.SET_NULL
     ), ForeignKey(
         entity = RoomGroup::class,
@@ -24,7 +24,7 @@ import androidx.room.PrimaryKey
     )], indices = [Index(
         value = ["listID"]
     ), Index(
-        value = ["categoryID"]
+        value = ["tagID"]
     ), Index(
         value = ["groupID"]
     )]
@@ -37,6 +37,6 @@ data class RoomItem(
     val amount: Int = 1,
     val isChecked: Boolean = false,
     val listID: Int,
-    val categoryID: Int?,
+    val tagID: Int?,
     val groupID: Int?
 )

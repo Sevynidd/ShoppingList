@@ -6,7 +6,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "Category",
+    tableName = "Tag",
     foreignKeys = [ForeignKey(
         entity = RoomAddress::class,
         parentColumns = ["addressID"],
@@ -17,11 +17,10 @@ import androidx.room.PrimaryKey
         value = ["addressID"]
     )]
 )
-data class RoomCategory(
+data class RoomTag(
     @PrimaryKey(autoGenerate = true)
-    val categoryID: Int = 0,
+    val tagID: Int = 0,
     val name: String,
-    val url: String,
     val color: String,
     val addressID: Int?
 )

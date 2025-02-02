@@ -135,7 +135,7 @@ fun LItems(
                                             note = "",
                                             price = 0.0F,
                                             amount = 1,
-                                            categoryID = null,
+                                            tagID = null,
                                             groupID = null
                                         )
 
@@ -158,7 +158,7 @@ fun LItems(
                                                     note = null,
                                                     price = 0.0F,
                                                     amount = 1,
-                                                    categoryID = null,
+                                                    tagID = null,
                                                     groupID = null
                                                 )
 
@@ -225,7 +225,7 @@ private fun Content(
                                 amount = item.amount,
                                 price = item.price,
                                 isChecked = item.isChecked,
-                                categoryID = item.categoryID,
+                                tagID = item.tagID,
                                 groupID = item.groupID
                             )
                         )
@@ -239,7 +239,7 @@ private fun Content(
                                 item.note,
                                 item.price,
                                 item.amount,
-                                item.categoryID ?: -1
+                                item.tagID ?: -1
                             )
                         )
                     },
@@ -253,7 +253,7 @@ private fun Content(
                                 amount = item.amount,
                                 price = item.price,
                                 isChecked = item.isChecked.not(),
-                                categoryID = item.categoryID,
+                                tagID = item.tagID,
                                 groupID = item.groupID
                             )
                         )

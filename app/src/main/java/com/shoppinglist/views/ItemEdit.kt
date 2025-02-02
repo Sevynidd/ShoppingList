@@ -70,7 +70,7 @@ fun ItemEdit(
                                     note = textItemNote.text,
                                     price = textItemPrice.text.replace(",", ".").toFloatOrNull()
                                         ?: 0.0F,
-                                    categoryID = null,
+                                    tagID = null,
                                     amount = if ((textItemAmount.text == "") or (textItemAmount.text == "0")) 1 else textItemAmount.text.toInt(),
                                     groupID = null
                                 )

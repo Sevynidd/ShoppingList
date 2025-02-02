@@ -6,23 +6,17 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import androidx.room.Room
-import com.shoppinglist.roomDatabase.RoomDatabase
 import com.shoppinglist.ui.theme.ShoppingListTheme
-import com.shoppinglist.viewModel.RoomRepository
 import com.shoppinglist.viewModel.RoomViewModel
 import com.shoppinglist.views.ItemEdit
 import com.shoppinglist.views.LItems
 import com.shoppinglist.views.ListEdit
 import com.shoppinglist.views.Lists
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
 import kotlinx.serialization.Serializable
 
 @AndroidEntryPoint
@@ -56,7 +50,11 @@ class MainActivity : ComponentActivity() {
 
                     composable<ScreenListEdit> {
                         val args = it.toRoute<ScreenListEdit>()
-                        ListEdit(args = args, viewModel = roomViewModel, navController = navController)
+                        ListEdit(
+                            args = args,
+                            viewModel = roomViewModel,
+                            navController = navController
+                        )
                     }
                 }
             }
