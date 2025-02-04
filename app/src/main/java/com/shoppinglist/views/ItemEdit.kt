@@ -72,7 +72,7 @@ fun ItemEdit(
                                         ?: 0.0F,
                                     tagID = null,
                                     amount = if ((textItemAmount.text == "") or (textItemAmount.text == "0")) 1 else textItemAmount.text.toInt(),
-                                    groupID = null
+                                    categoryID = null
                                 )
                             )
                             navController.navigateUp()

@@ -136,7 +136,7 @@ fun LItems(
                                             price = 0.0F,
                                             amount = 1,
                                             tagID = null,
-                                            groupID = null
+                                            categoryID = null
                                         )
 
                                         viewModel.upsertItem(item)
@@ -159,7 +159,7 @@ fun LItems(
                                                     price = 0.0F,
                                                     amount = 1,
                                                     tagID = null,
-                                                    groupID = null
+                                                    categoryID = null
                                                 )
 
                                                 viewModel.upsertItem(item)
@@ -226,7 +226,7 @@ private fun Content(
                                 price = item.price,
                                 isChecked = item.isChecked,
                                 tagID = item.tagID,
-                                groupID = item.groupID
+                                categoryID = item.categoryID
                             )
                         )
                     },
@@ -254,7 +254,7 @@ private fun Content(
                                 price = item.price,
                                 isChecked = item.isChecked.not(),
                                 tagID = item.tagID,
-                                groupID = item.groupID
+                                categoryID = item.categoryID
                             )
                         )
                     },

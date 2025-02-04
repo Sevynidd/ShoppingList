@@ -4,10 +4,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "Group"
+    tableName = "Category"
 )
-data class RoomGroup(
+data class RoomCategory(
     @PrimaryKey(autoGenerate = true)
-    val groupID: Int = 0,
+    val categoryID: Int = 0,
     val name: String
 )
