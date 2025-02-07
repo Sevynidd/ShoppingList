@@ -1,9 +1,15 @@
 package com.shoppinglist.views
 
+import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -11,14 +17,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Abc
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -26,6 +38,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -48,6 +61,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.shoppinglist.ScreenLItems
@@ -124,13 +138,51 @@ fun Lists(viewModel: RoomViewModel, navController: NavHostController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(innerPadding)
+                    .padding(
+                        top = innerPadding.calculateTopPadding(),
+                        start = innerPadding.calculateStartPadding(layoutDirection = LayoutDirection.Ltr),
+                        end = innerPadding.calculateEndPadding(layoutDirection = LayoutDirection.Ltr)
+                    )
+                    .background(
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
+                    )
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(horizontal = 18.dp)
+                        .padding(top = 20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        AssistChip(
+                            onClick = { Log.d("Assist chip", "Alphabetical") },
+                            label = { Text("Alphabetical") },
+                            leadingIcon = {
+                                Icon(
+                                    Icons.Filled.Abc,
+                                    contentDescription = "AlphabeticalFilter",
+                                    Modifier.size(AssistChipDefaults.IconSize)
+                                )
+                            }
+                        )
+                        AssistChip(
+                            onClick = { Log.d("Assist chip", "Creation Date") },
+                            label = { Text("Creation Date") },
+                            leadingIcon = {
+                                Icon(
+                                    Icons.Filled.DateRange,
+                                    contentDescription = "CreationDateFilter",
+                                    Modifier.size(AssistChipDefaults.IconSize)
+                                )
+                            }
+                        )
+                    }
+                    Spacer(Modifier.size(12.dp))
                     Content(navController, viewModel)
                 }
             }
@@ -146,6 +198,7 @@ fun Lists(viewModel: RoomViewModel, navController: NavHostController) {
                     var textListName by remember { mutableStateOf(TextFieldValue("")) }
                     var listNameMissing by remember { mutableStateOf(false) }
                     var textListNote by remember { mutableStateOf(TextFieldValue("")) }
+                    var extraFieldsVisible by remember { mutableStateOf(false) }
 
                     Column(
                         modifier = Modifier
@@ -175,68 +228,90 @@ fun Lists(viewModel: RoomViewModel, navController: NavHostController) {
                             }
                         )
 
-                        OutlinedTextField(
-                            value = textListNote,
-                            label = { Text(text = "Notiz") },
-                            onValueChange = {
-                                textListNote = it
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                            singleLine = true
-                        )
-
                         Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    extraFieldsVisible = extraFieldsVisible.not()
+                                },
+                            horizontalArrangement = Arrangement.End,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(
-                                text = "Benachrichtigung: ${
-                                    if ((textNotifyField?.toInstant(TimeZone.currentSystemDefault())
-                                            ?.toEpochMilliseconds() == 0L) or (textNotifyField == null)
-                                    ) {
-                                        "Keine"
-                                    } else {
-                                        "\n" + (textNotifyField?.toJavaLocalDateTime()
-                                            ?.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")))
-                                    }
-                                }",
-                                modifier = Modifier.weight(0.7f)
+                            Icon(
+                                if (extraFieldsVisible) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                                "IconDropdown"
                             )
-
-                            IconButton(
-                                onClick = {
-                                    focusManager.clearFocus()
-                                    showDatePickerDialog = true
-                                },
-                                modifier = Modifier.weight(0.1f)
-                            ) {
-                                Icon(Icons.Default.DateRange, "Date")
-                            }
-
-                            IconButton(
-                                onClick = {
-                                    focusManager.clearFocus()
-                                    showTimePickerDialog = true
-                                },
-                                modifier = Modifier.weight(0.1f)
-                            ) {
-                                Icon(Icons.Default.AccessTime, "Time")
-                            }
-
-                            IconButton(
-                                onClick = {
-                                    focusManager.clearFocus()
-                                    textNotifyField = null
-                                },
-                                modifier = Modifier.weight(0.1f)
-                            ) {
-                                Icon(Icons.Default.Delete, "Delete")
-                            }
                         }
 
+                        AnimatedVisibility(extraFieldsVisible) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                OutlinedTextField(
+                                    value = textListNote,
+                                    label = { Text(text = "Notiz") },
+                                    onValueChange = {
+                                        textListNote = it
+                                    },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                                    singleLine = true
+                                )
 
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = "Benachrichtigung: ${
+                                            if ((textNotifyField?.toInstant(TimeZone.currentSystemDefault())
+                                                    ?.toEpochMilliseconds() == 0L) or (textNotifyField == null)
+                                            ) {
+                                                "Keine"
+                                            } else {
+                                                "\n" + (textNotifyField?.toJavaLocalDateTime()
+                                                    ?.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")))
+                                            }
+                                        }",
+                                        modifier = Modifier.weight(0.7f)
+                                    )
+
+                                    IconButton(
+                                        onClick = {
+                                            focusManager.clearFocus()
+                                            showDatePickerDialog = true
+                                        },
+                                        modifier = Modifier.weight(0.1f)
+                                    ) {
+                                        Icon(Icons.Default.DateRange, "Date")
+                                    }
+
+                                    IconButton(
+                                        onClick = {
+                                            focusManager.clearFocus()
+                                            showTimePickerDialog = true
+                                        },
+                                        modifier = Modifier.weight(0.1f)
+                                    ) {
+                                        Icon(Icons.Default.AccessTime, "Time")
+                                    }
+
+                                    IconButton(
+                                        onClick = {
+                                            focusManager.clearFocus()
+                                            textNotifyField = null
+                                        },
+                                        modifier = Modifier.weight(0.1f)
+                                    ) {
+                                        Icon(Icons.Default.Delete, "Delete")
+                                    }
+                                }
+                            }
+                        }
 
                         Spacer(modifier = Modifier.size(12.dp))
 

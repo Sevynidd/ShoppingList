@@ -5,13 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.shoppinglist.roomDatabase.entities.RoomAddress
 import com.shoppinglist.roomDatabase.entities.RoomCategory
 import com.shoppinglist.roomDatabase.entities.RoomItem
 import com.shoppinglist.roomDatabase.entities.RoomList
 import com.shoppinglist.roomDatabase.entities.RoomTag
 
 @Database(
-    entities = [RoomList::class, RoomItem::class, RoomTag::class, RoomCategory::class],
+    entities = [RoomList::class, RoomItem::class, RoomTag::class, RoomCategory::class, RoomAddress::class],
     exportSchema = false,
     version = 1
 )

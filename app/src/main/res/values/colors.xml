@@ -5,6 +5,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="splash">#FF000000</color>
-    <color name="splashbackground">#FFFFFFFF</color>
+    <color name="splash">#FF3A608F</color>
+    <color name="splashbackground">#FFF8F9FF</color>
 </resources>
