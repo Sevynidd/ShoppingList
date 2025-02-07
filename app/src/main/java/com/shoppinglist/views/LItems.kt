@@ -131,12 +131,7 @@ fun LItems(
                                     if (textAddItem.text.isNotBlank()) {
                                         val item = RoomItem(
                                             listID = args.listID,
-                                            name = textAddItem.text,
-                                            note = "",
-                                            price = 0.0F,
-                                            amount = 1,
-                                            tagID = null,
-                                            categoryID = null
+                                            name = textAddItem.text
                                         )
 
                                         viewModel.upsertItem(item)
@@ -154,12 +149,7 @@ fun LItems(
                                             if (textAddItem.text.isNotBlank()) {
                                                 val item = RoomItem(
                                                     listID = args.listID,
-                                                    name = textAddItem.text,
-                                                    note = null,
-                                                    price = 0.0F,
-                                                    amount = 1,
-                                                    tagID = null,
-                                                    categoryID = null
+                                                    name = textAddItem.text
                                                 )
 
                                                 viewModel.upsertItem(item)

@@ -254,7 +254,6 @@ fun Lists(viewModel: RoomViewModel, navController: NavHostController) {
                                             textNotifyField?.toInstant(TimeZone.currentSystemDefault())
                                                 ?.toEpochMilliseconds()
                                         }
-
                                     )
 
                                     viewModel.upsertList(list)

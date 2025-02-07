@@ -10,5 +10,6 @@ data class RoomTag(
     @PrimaryKey(autoGenerate = true)
     val tagID: Int = 0,
     val name: String,
-    val color: String
+    // Save as HEX
+    val color: String? = null
 )

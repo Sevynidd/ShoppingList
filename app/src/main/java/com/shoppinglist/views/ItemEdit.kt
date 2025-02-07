@@ -70,9 +70,7 @@ fun ItemEdit(
                                     note = textItemNote.text,
                                     price = textItemPrice.text.replace(",", ".").toFloatOrNull()
                                         ?: 0.0F,
-                                    tagID = null,
-                                    amount = if ((textItemAmount.text == "") or (textItemAmount.text == "0")) 1 else textItemAmount.text.toInt(),
-                                    categoryID = null
+                                    amount = if ((textItemAmount.text == "") or (textItemAmount.text == "0")) 1 else textItemAmount.text.toInt()
                                 )
                             )
                             navController.navigateUp()

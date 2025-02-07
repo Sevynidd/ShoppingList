@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.shoppinglist.roomDatabase.entities.RoomCategory
 import com.shoppinglist.roomDatabase.entities.RoomItem
 import com.shoppinglist.roomDatabase.entities.RoomList
@@ -14,6 +15,7 @@ import com.shoppinglist.roomDatabase.entities.RoomTag
     exportSchema = false,
     version = 1
 )
+@TypeConverters(RoomTypeConverter::class)
 abstract class RoomDatabase : RoomDatabase() {
     abstract fun roomDao(): RoomDao
 

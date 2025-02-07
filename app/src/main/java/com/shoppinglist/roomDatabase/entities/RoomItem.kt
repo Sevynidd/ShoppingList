@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.net.URL
 
 @Entity(
     tableName = "Item", foreignKeys = [ForeignKey(
@@ -33,10 +34,11 @@ data class RoomItem(
     @PrimaryKey(autoGenerate = true) val itemID: Int = 0,
     val price: Float = 0.0F,
     val name: String,
-    val note: String?,
+    val note: String? = null,
     val amount: Int = 1,
     val isChecked: Boolean = false,
+    val url: URL? = null,
     val listID: Int,
-    val tagID: Int?,
-    val categoryID: Int?
+    val tagID: Int? = null,
+    val categoryID: Int? = null
 )
