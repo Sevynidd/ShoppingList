@@ -14,7 +14,7 @@ import com.shoppinglist.roomDatabase.entities.RoomTag
 @Database(
     entities = [RoomList::class, RoomItem::class, RoomTag::class, RoomCategory::class, RoomAddress::class],
     exportSchema = false,
-    version = 1
+    version = 2
 )
 @TypeConverters(RoomTypeConverter::class)
 abstract class RoomDatabase : RoomDatabase() {
