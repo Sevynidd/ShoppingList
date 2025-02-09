@@ -1,6 +1,5 @@
 package com.shoppinglist.views
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,22 +15,26 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Abc
+import androidx.compose.material.icons.filled.AcUnit
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AttachMoney
+import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.RemoveShoppingCart
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -39,11 +42,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SelectableDates
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TopAppBar
@@ -53,12 +60,14 @@ import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -124,6 +133,10 @@ fun Lists(viewModel: RoomViewModel, navController: NavHostController) {
 
         var textNotifyField by remember { mutableStateOf(null as LocalDateTime?) }
 
+        var showIconPickerDialog by remember {
+            mutableStateOf(false)
+        }
+
         Scaffold(modifier = Modifier.fillMaxSize(),
             topBar = { TopAppBar(title = { Text(text = "Meine Listen") }) },
             floatingActionButton = {
@@ -156,37 +169,37 @@ fun Lists(viewModel: RoomViewModel, navController: NavHostController) {
                         .padding(top = 20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        AssistChip(
-                            onClick = { Log.d("Assist chip", "Alphabetical") },
-                            label = { Text("Alphabetical") },
-                            leadingIcon = {
-                                Icon(
-                                    Icons.Filled.Abc,
-                                    contentDescription = "AlphabeticalFilter",
-                                    Modifier.size(AssistChipDefaults.IconSize)
-                                )
+                    val options = listOf("Alphabetical", "CreationDate")
+                    val optionsIcon = listOf(Icons.Filled.Abc, Icons.Filled.DateRange)
+                    var selectedIndex by remember { mutableIntStateOf(0) }
+
+                    SingleChoiceSegmentedButtonRow {
+                        options.forEachIndexed { index, label ->
+                            SegmentedButton(
+                                shape = SegmentedButtonDefaults.itemShape(
+                                    index = index,
+                                    count = options.size
+                                ),
+                                onClick = { selectedIndex = index },
+                                selected = index == selectedIndex,
+                                icon = {
+                                    Icon(
+                                        optionsIcon[index],
+                                        contentDescription = label,
+                                        Modifier.size(SegmentedButtonDefaults.IconSize)
+                                    )
+                                }
+                            ) {
+                                Text(label)
                             }
-                        )
-                        AssistChip(
-                            onClick = { Log.d("Assist chip", "Creation Date") },
-                            label = { Text("Creation Date") },
-                            leadingIcon = {
-                                Icon(
-                                    Icons.Filled.DateRange,
-                                    contentDescription = "CreationDateFilter",
-                                    Modifier.size(AssistChipDefaults.IconSize)
-                                )
-                            }
-                        )
+                        }
                     }
+
                     Spacer(Modifier.size(12.dp))
                     Content(navController, viewModel)
                 }
             }
+            var selectedIcon by remember { mutableStateOf(Icons.Default.ShoppingCart) }
 
             if (showBottomSheet) {
                 ModalBottomSheet(
@@ -208,26 +221,39 @@ fun Lists(viewModel: RoomViewModel, navController: NavHostController) {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        OutlinedTextField(
-                            value = textListName,
-                            label = { Text(text = "Name") },
-                            onValueChange = {
-                                textListName = it
-                                listNameMissing = false
-                            },
+                        Row(
                             modifier = Modifier.fillMaxWidth(),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                            keyboardActions = KeyboardActions {
-                                focusManager.moveFocus(FocusDirection.Next)
-                            },
-                            singleLine = true,
-                            isError = listNameMissing,
-                            supportingText = {
-                                if (listNameMissing) {
-                                    Text("Es muss ein Listenname eingegeben werden")
-                                }
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+
+                            IconButton(
+                                onClick = { showIconPickerDialog = true }
+                            ) {
+                                Icon(selectedIcon, "IconPicker")
                             }
-                        )
+
+                            OutlinedTextField(
+                                value = textListName,
+                                label = { Text(text = "Name") },
+                                onValueChange = {
+                                    textListName = it
+                                    listNameMissing = false
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                                keyboardActions = KeyboardActions {
+                                    focusManager.moveFocus(FocusDirection.Next)
+                                },
+                                singleLine = true,
+                                isError = listNameMissing,
+                                supportingText = {
+                                    if (listNameMissing) {
+                                        Text("Es muss ein Listenname eingegeben werden")
+                                    }
+                                }
+                            )
+                        }
 
                         Row(
                             modifier = Modifier
@@ -347,6 +373,50 @@ fun Lists(viewModel: RoomViewModel, navController: NavHostController) {
                 }
             }
 
+            if (showIconPickerDialog) {
+                val listIcons = listOf(
+                    Icons.Default.ShoppingCart,
+                    Icons.Default.AcUnit,
+                    Icons.Default.AttachMoney,
+                    Icons.Default.Book
+                )
+                var selectedIndexIcon by remember { mutableIntStateOf(0) }
+
+                AlertDialog(
+                    onDismissRequest = { showIconPickerDialog = false },
+                    confirmButton = {
+                        Button(onClick = {
+                            selectedIcon = listIcons[selectedIndexIcon]
+                            showIconPickerDialog = false
+                        }) {
+                            Text(text = "Ok")
+                        }
+                    },
+                    text = {
+                        LazyVerticalGrid(
+                            columns = GridCells.Adaptive(minSize = 86.dp)
+                        ) {
+                            itemsIndexed(listIcons) { index, icon ->
+                                Icon(
+                                    modifier = Modifier
+                                        .clickable {
+                                            selectedIndexIcon = index
+                                        }
+                                        .background(
+                                            color = if (selectedIndexIcon ==
+                                                index
+                                            ) Color.Gray else IconButtonDefaults.iconButtonColors().containerColor,
+                                            shape = RoundedCornerShape(12.dp)
+                                        ),
+                                    imageVector = icon,
+                                    contentDescription = "icon"
+                                )
+                            }
+                        }
+                    }
+                )
+            }
+
             if (showDatePickerDialog) {
                 DatePickerDialog(
                     onDismissRequest = { showDatePickerDialog = false },
@@ -451,7 +521,7 @@ private fun Content(navController: NavHostController, viewModel: RoomViewModel) 
                         supporting = list.list.note,
                         trailing = "Anzahl: ${list.itemCount}",
                         isItem = false,
-                        listIcon = Icons.Default.RemoveShoppingCart
+                        listIcon = list.list.icon ?: Icons.Default.ShoppingCart
                     )
                 )
             }

@@ -1,5 +1,8 @@
 package com.shoppinglist.roomDatabase.entities
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -10,5 +13,5 @@ data class RoomList(
     val name: String,
     val note: String,
     val notifyDate: Long? = null,
-    val icon: String? = null
+    val icon: ImageVector? = Icons.Default.ShoppingCart
 )
