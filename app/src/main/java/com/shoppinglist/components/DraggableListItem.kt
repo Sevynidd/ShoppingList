@@ -60,7 +60,7 @@ fun DraggableListItem(
     onCheckBoxClick: (() -> Unit)? = null,
     draggableItemInfo: DraggableItemInfo
 ) {
-    val anchors: List<Float> = listOf(0f, 180f, -180f)
+    val anchors: List<Float> = listOf(0f, 200f, -200f)
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -195,8 +195,8 @@ fun DraggableListItem(
                     )
                 } else {
                     Icon(
-                        Icons.Default.ShoppingCart,
-                        contentDescription = "ShoppingCart",
+                        draggableItemInfo.listIcon,
+                        contentDescription = "ListIcon",
                         tint = MaterialTheme.colorScheme.surfaceTint
                     )
                 }

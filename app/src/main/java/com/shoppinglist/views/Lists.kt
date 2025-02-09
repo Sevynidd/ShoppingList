@@ -28,10 +28,12 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.RemoveShoppingCart
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
+import androidx.compose.material3.ChipColors
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -144,7 +146,7 @@ fun Lists(viewModel: RoomViewModel, navController: NavHostController) {
                         end = innerPadding.calculateEndPadding(layoutDirection = LayoutDirection.Ltr)
                     )
                     .background(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        color = MaterialTheme.colorScheme.secondaryContainer,
                         shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
                     )
             ) {
@@ -449,7 +451,8 @@ private fun Content(navController: NavHostController, viewModel: RoomViewModel) 
                         headline = list.list.name,
                         supporting = list.list.note,
                         trailing = "Anzahl: ${list.itemCount}",
-                        isItem = false
+                        isItem = false,
+                        listIcon = Icons.Default.RemoveShoppingCart
                     )
                 )
             }
