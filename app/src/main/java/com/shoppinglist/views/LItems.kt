@@ -1,8 +1,11 @@
 package com.shoppinglist.views
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -39,6 +42,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.shoppinglist.ScreenItemEdit
@@ -87,12 +91,21 @@ fun LItems(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(innerPadding)
+                        .padding(
+                            top = innerPadding.calculateTopPadding(),
+                            start = innerPadding.calculateStartPadding(layoutDirection = LayoutDirection.Ltr),
+                            end = innerPadding.calculateEndPadding(layoutDirection = LayoutDirection.Ltr)
+                        )
+                        .background(
+                            color = MaterialTheme.colorScheme.secondaryContainer,
+                            shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
+                        )
                 ) {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(horizontal = 18.dp)
+                            .padding(top = 20.dp)
                     ) {
                         Content(viewModel, navController)
                     }
@@ -101,13 +114,17 @@ fun LItems(
             bottomBar = {
                 BottomAppBar(
                     modifier = Modifier
-                        .clip(shape = RoundedCornerShape(16.dp))
+                        .clip(shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
                         .fillMaxWidth()
                         .wrapContentHeight(Alignment.CenterVertically)
                         .imePadding(),
                     content = {
                         Column(
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(
+                                    shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
+                                ),
                             verticalArrangement = Arrangement.Top,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {

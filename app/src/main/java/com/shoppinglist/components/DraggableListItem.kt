@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
@@ -206,6 +205,8 @@ fun DraggableListItem(
     }
 
     if (showDeleteDialog) {
+        val alertDialogText = if (draggableItemInfo.isItem) "das Item" else "die Liste"
+
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
             confirmButton = {
@@ -230,7 +231,11 @@ fun DraggableListItem(
                 }
             },
             title = { Text("Bestätige Löschen") },
-            text = { Text("Bist du dir sicher, dass du dies löschen möchtest?") }
+            text = {
+                Text(
+                    "Bist du dir sicher, dass du $alertDialogText löschen möchtest?"
+                )
+            }
         )
     }
 
